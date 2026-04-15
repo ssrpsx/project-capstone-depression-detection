@@ -11,7 +11,7 @@ function toggleForms() {
     }
 }
 
-document.getElementById('form-login').addEventListener('submit', async function(e) {
+document.getElementById('form-login').addEventListener('submit', async function (e) {
     e.preventDefault();
     const email = document.getElementById('login-email').value;
     const password = document.getElementById('login-password').value;
@@ -38,7 +38,7 @@ document.getElementById('form-login').addEventListener('submit', async function(
     }
 });
 
-document.getElementById('form-signup').addEventListener('submit', async function(e) {
+document.getElementById('form-signup').addEventListener('submit', async function (e) {
     e.preventDefault();
     const email = document.getElementById('signup-email').value;
     const password = document.getElementById('signup-password').value;

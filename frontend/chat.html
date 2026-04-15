@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindChat – Depression Detection</title>
+    <link rel="stylesheet" href="chat.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body>
+
+    <!-- ═══ OUTER SHELL ═══ -->
+    <div class="shell">
+
+        <!-- ── TOP HEADER ── -->
+        <header class="top-header">
+            <div class="header-logo">
+                <div class="logo-mark">
+                    <i class="fa-solid fa-brain"></i>
+                </div>
+                <span class="logo-label">MindChat</span>
+            </div>
+            <div class="header-user" id="header-user">
+                <i class="fa-solid fa-circle-user"></i>
+                <span id="display-username">Name</span>
+                <i class="fa-solid fa-chevron-down chev"></i>
+            </div>
+        </header>
+
+        <!-- ── TAB BAR ── -->
+        <nav class="tab-bar">
+            <button class="tab active" id="tab-home">
+                <i class="fa-solid fa-house"></i>
+                <span>Home</span>
+            </button>
+            <button class="tab" id="tab-help">
+                <span>Help &amp; FAQ</span>
+            </button>
+        </nav>
+
+        <!-- ── CHAT SECTION ── -->
+        <section class="chat-section">
+            <div class="chat-panel">
+
+                <!-- messages -->
+                <div class="messages" id="messages">
+
+                    <!-- Welcome message (bot) -->
+                    <div class="row bot" id="welcome-row">
+                        <div class="av bot-av"><i class="fa-solid fa-robot"></i></div>
+                        <div class="bubble bot-bubble">
+                            <p>สวัสดีครับ! 👋 ฉันชื่อ MindBot<br>พูดคุยกับฉันได้เลยนะครับ</p>
+                            <span class="ts" id="welcome-ts"></span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- input bar -->
+                <div class="input-bar">
+                    <button class="add-btn" id="btn-add" title="เพิ่มไฟล์">
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
+                    <input id="msg-input" class="msg-input" type="text" placeholder="send message" autocomplete="off" />
+                    <button class="send-btn" id="btn-send">
+                        <i class="fa-solid fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <script src="chat.js"></script>
+</body>
+
+</html>
