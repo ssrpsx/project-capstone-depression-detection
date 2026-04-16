@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS users (
     lastname VARCHAR(100),
     username VARCHAR(100) UNIQUE,
     password VARCHAR(255),
+    phone VARCHAR(20) DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

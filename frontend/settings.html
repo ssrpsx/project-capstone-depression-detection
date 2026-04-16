@@ -1,15 +1,14 @@
 <!DOCTYPE html>
 <html lang="th">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JID – Chat</title>
-    <link rel="stylesheet" href="chat.css">
+    <title>JID – Settings</title>
+    <link rel="stylesheet" href="chat.css"> <!-- Load shared styles -->
+    <link rel="stylesheet" href="settings.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
-
 <body>
 
     <!-- ══ OUTER FRAME ══ -->
@@ -17,79 +16,46 @@
 
         <!-- ══ SIDEBAR ══ -->
         <aside class="sidebar">
-            <!-- Logo -->
             <div class="sidebar-logo">JID</div>
 
-            <!-- Main nav -->
             <nav class="sidebar-nav">
-                <a href="chat.html" class="nav-item active" id="nav-chat">
+                <a href="chat.html" class="nav-item" id="nav-chat">
                     <i class="fa-solid fa-message"></i>
                     <span>Chat</span>
                 </a>
-                <a href="settings.html" class="nav-item" id="nav-settings">
+                <a href="settings.html" class="nav-item active" id="nav-settings">
                     <i class="fa-solid fa-gear"></i>
                     <span>Settings</span>
                 </a>
             </nav>
 
-            <!-- Footer nav -->
             <nav class="sidebar-footer">
-                <a href="#" class="nav-item footer-item" id="nav-help">
+                <button class="nav-item footer-item" id="nav-help">
                     <i class="fa-regular fa-circle-question"></i>
                     <span>Help</span>
-                </a>
-                <a href="#" class="nav-item footer-item" id="nav-logout">
+                </button>
+                <button class="nav-item footer-item" id="nav-logout">
                     <i class="fa-solid fa-right-from-bracket"></i>
                     <span>Log out</span>
-                </a>
+                </button>
             </nav>
         </aside>
 
         <!-- ══ MAIN AREA ══ -->
         <main class="main-container">
 
-            <!-- ── CHAT SECTION ── -->
-            <section class="main-content" id="chat-section">
-                <!-- Messages container -->
-                <div class="messages" id="messages">
-                    <!-- Welcome message (bot) -->
-                    <div class="msg-row bot" id="welcome-row">
-                        <div class="msg-av bot-av"></div>
-                        <div class="msg-bubble bot-bubble">
-                            <p>สวัสดีครับ! 👋 ฉันชื่อ JID<br>พูดคุยกับฉันได้เลยนะครับ</p>
-                            <span class="msg-ts" id="welcome-ts"></span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Input section -->
-                <div class="input-section">
-                    <div class="input-wrapper">
-                        <button class="input-add" id="btn-add" title="เพิ่มไฟล์">
-                            <i class="fa-solid fa-plus"></i>
-                        </button>
-                        <input id="msg-input" class="msg-input" type="search" placeholder="Send a massage"
-                            autocomplete="off" />
-                    </div>
-                    <button class="input-send" id="btn-send">
-                        <i class="fa-solid fa-paper-plane"></i>
-                    </button>
-                </div>
-            </section>
-
             <!-- ── SETTINGS SECTION ── -->
-            <section class="main-content" id="settings-section" style="display: none;">
+            <section class="main-content" id="settings-section">
                 <h1 class="settings-title">Account Setting</h1>
 
                 <div class="profile-header">
                     <div class="profile-avatar-wrapper">
-                        <img src="https://cdn-icons-png.flaticon.com/512/1998/1998664.png" alt="Profile"
-                            class="profile-img">
+                        <img src="https://cdn-icons-png.flaticon.com/512/1998/1998664.png" alt="Profile" class="profile-img">
                     </div>
                     <div class="profile-info">
-                        <h2 class="profile-name">Chathip Choochuay</h2>
-                        <p class="profile-email">s.suphakom@gmail.com</p>
-                        <p class="profile-phone">0986453909</p>
+                        <h2 class="profile-name" id="display-name">Loading...</h2>
+                        <p class="profile-email" id="display-email"></p>
+                        <p class="profile-phone" id="display-phone"></p>
                         <div class="profile-actions">
                             <button class="btn btn-secondary">Upload Profile</button>
                             <button class="btn btn-outline">Delete</button>
@@ -103,28 +69,28 @@
                         <div class="form-group">
                             <label>Firstname</label>
                             <div class="edit-input-wrapper">
-                                <input type="text" value="Chanathip">
+                                <input type="text" id="input-firstname" placeholder="Firstname">
                                 <i class="fa-solid fa-pen-to-square edit-icon"></i>
                             </div>
                         </div>
                         <div class="form-group">
                             <label>Lastname</label>
                             <div class="edit-input-wrapper">
-                                <input type="text" value="Choochuay">
+                                <input type="text" id="input-lastname" placeholder="Lastname">
                                 <i class="fa-solid fa-pen-to-square edit-icon"></i>
                             </div>
                         </div>
                         <div class="form-group">
                             <label>Email</label>
                             <div class="edit-input-wrapper">
-                                <input type="email" value="s.suphakom@gmail.com">
+                                <input type="email" id="input-email" placeholder="Email">
                                 <i class="fa-solid fa-pen-to-square edit-icon"></i>
                             </div>
                         </div>
                         <div class="form-group">
                             <label>Phone</label>
                             <div class="edit-input-wrapper">
-                                <input type="text" value="0986453909">
+                                <input type="text" id="input-phone" placeholder="Phone">
                                 <i class="fa-solid fa-pen-to-square edit-icon"></i>
                             </div>
                         </div>
@@ -163,7 +129,6 @@
 
     </div>
 
-    <script src="chat.js"></script>
+    <script src="settings.js"></script>
 </body>
-
 </html>

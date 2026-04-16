@@ -27,8 +27,8 @@ document.getElementById('form-login').addEventListener('submit', async function 
 
         if (response.ok) {
             localStorage.setItem('jwt_token', data.token);
-            alert('Logged in successfully! Token generated and saved.');
-            // window.location.href = '/dashboard.html'; // Redirect upon successful login
+            localStorage.setItem('user_id', data.user.id);
+            window.location.href = 'chat.html';
         } else {
             alert('Login failed: ' + (data.error || 'Unknown error'));
         }

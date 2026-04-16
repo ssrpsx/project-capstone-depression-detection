@@ -1,36 +1,49 @@
 /* ══════════════════════════════════════════════
-   chat.js  –  MindChat
-   (stub พร้อมเชื่อม AI chatbot ภายหลัง)
+   chat.js  –  JID Chat App
    ══════════════════════════════════════════════ */
 
+const API_CHAT = 'http://localhost:5000/api/chats';
+const userId   = localStorage.getItem('user_id');
+const token    = localStorage.getItem('jwt_token');
+
+// ─── Auth Guard ─────────────────────────────
+if (!token || !userId) {
+    window.location.href = 'index.html';
+}
+
 // ─── DOM refs ─────────────────────────────────
-const messages       = document.getElementById('messages');
-const msgInput       = document.getElementById('msg-input');
-const btnSend        = document.getElementById('btn-send');
-const btnAdd         = document.getElementById('btn-add');
-const displayUsername = document.getElementById('display-username');
-const welcomeTs      = document.getElementById('welcome-ts');
+const messagesContainer = document.getElementById('messages');
+const msgInput          = document.getElementById('msg-input');
+const btnSend           = document.getElementById('btn-send');
+const btnAdd            = document.getElementById('btn-add');
+const btnLogout         = document.getElementById('nav-logout');
 
-// ─── Init: timestamp + username ──────────────
-if (welcomeTs) welcomeTs.textContent = formatTime(new Date());
-
-(function loadUsername() {
+// ─── Init Load ────────────────────────────────
+async function loadHistory() {
     try {
-        const token = localStorage.getItem('jwt_token');
-        if (token) {
-            const payload = JSON.parse(atob(token.split('.')[1]));
-            if (payload.username) displayUsername.textContent = payload.username;
-        }
-    } catch (_) {}
-})();
+        const response = await fetch(`${API_CHAT}/user/${userId}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const history = await response.json();
 
-// ─── Tab switch ───────────────────────────────
-document.querySelectorAll('.tab').forEach(tab => {
-    tab.addEventListener('click', () => {
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-    });
-});
+        if (response.ok) {
+            // Clear current welcome or existing messages
+            messagesContainer.innerHTML = '';
+            
+            // Re-append welcome if empty
+            if (history.length === 0) {
+                appendMessage('สวัสดีครับ! 👋 ฉันชื่อ JID\nพูดคุยกับฉันได้เลยนะครับ', 'bot');
+            } else {
+                // history returns newest first normally in my route, let's reverse to show chronological
+                history.reverse().forEach(chat => {
+                    appendMessage(chat.chat_text, chat.chat_user ? 'user' : 'bot');
+                });
+            }
+        }
+    } catch (error) {
+        console.error('Error loading history:', error);
+    }
+}
 
 // ─── Helpers ─────────────────────────────────
 function formatTime(date) {
@@ -38,30 +51,33 @@ function formatTime(date) {
 }
 
 function scrollBottom() {
-    messages.scrollTop = messages.scrollHeight;
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
 }
 
 // ─── Append message row ───────────────────────
 function appendMessage(text, who /* 'bot' | 'user' */) {
     const row = document.createElement('div');
-    row.className = `row ${who}`;
+    row.className = `msg-row ${who}`;
 
     // avatar
     const av = document.createElement('div');
-    av.className = `av ${who === 'bot' ? 'bot-av' : 'user-av'}`;
-    av.innerHTML = who === 'bot'
-        ? '<i class="fa-solid fa-robot"></i>'
-        : '<i class="fa-solid fa-user"></i>';
+    av.className = `msg-av ${who === 'bot' ? 'bot-av' : 'user-av'}`;
+    // Using simple icons or dots as in the refined UI
+    if (who === 'bot') {
+        av.innerHTML = ''; // Keep it as a blue dot if that's the current CSS style
+    } else {
+        av.innerHTML = '<i class="fa-solid fa-user"></i>';
+    }
 
     // bubble
     const bubble = document.createElement('div');
-    bubble.className = `bubble ${who === 'bot' ? 'bot-bubble' : 'user-bubble'}`;
+    bubble.className = `msg-bubble ${who === 'bot' ? 'bot-bubble' : 'user-bubble'}`;
 
     const p = document.createElement('p');
     p.textContent = text;
 
     const ts = document.createElement('span');
-    ts.className = 'ts';
+    ts.className = 'msg-ts';
     ts.textContent = formatTime(new Date());
 
     bubble.appendChild(p);
@@ -69,7 +85,7 @@ function appendMessage(text, who /* 'bot' | 'user' */) {
     row.appendChild(av);
     row.appendChild(bubble);
 
-    messages.appendChild(row);
+    messagesContainer.appendChild(row);
     scrollBottom();
 }
 
@@ -78,19 +94,18 @@ function showTyping() {
     removeTyping();
     const row = document.createElement('div');
     row.id = 'typing-row';
-    row.className = 'row bot';
+    row.className = 'msg-row bot';
 
     const av = document.createElement('div');
-    av.className = 'av bot-av';
-    av.innerHTML = '<i class="fa-solid fa-robot"></i>';
+    av.className = 'msg-av bot-av';
 
     const bubble = document.createElement('div');
-    bubble.className = 'bubble bot-bubble typing-dots';
+    bubble.className = 'msg-bubble bot-bubble typing-dots';
     bubble.innerHTML = '<span></span><span></span><span></span>';
 
     row.appendChild(av);
     row.appendChild(bubble);
-    messages.appendChild(row);
+    messagesContainer.appendChild(row);
     scrollBottom();
 }
 
@@ -104,30 +119,37 @@ async function sendMessage() {
     const text = msgInput.value.trim();
     if (!text) return;
 
+    // 1. Show message in UI
     appendMessage(text, 'user');
     msgInput.value = '';
     btnSend.disabled = true;
     showTyping();
 
     try {
-        // ╔══════════════════════════════════════════╗
-        // ║  TODO: เชื่อม AI chatbot endpoint ตรงนี้ ║
-        // ╠══════════════════════════════════════════╣
-        // const res = await fetch('http://localhost:5000/api/chat', {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //         'Authorization': `Bearer ${localStorage.getItem('jwt_token')}`
-        //     },
-        //     body: JSON.stringify({ message: text })
-        // });
-        // const data = await res.json();
-        // const reply = data.reply;
-        // ╚══════════════════════════════════════════╝
+        // 2. Save to database
+        await fetch(API_CHAT, {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ user_id: userId, chat_text: text, chat_user: true })
+        });
 
-        // ── Placeholder (ลบออกเมื่อเชื่อม AI จริง) ──
-        await new Promise(r => setTimeout(r, 1100));
-        const reply = '[AI response will appear here]';
+        // 3. AI response placeholder
+        // TODO: Replace with real AI API call
+        await new Promise(r => setTimeout(r, 1500));
+        const reply = "ขอบคุณที่บอกเล่าเรื่องราวให้ฟังนะครับ ฉันยินดีรับฟังเสมอครับ [AI Mock Response]";
+
+        // 4. Save AI response to DB (Optional, but keeps history consistent)
+        await fetch(API_CHAT, {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ user_id: userId, chat_text: reply, chat_user: false })
+        });
 
         removeTyping();
         appendMessage(reply, 'bot');
@@ -135,7 +157,7 @@ async function sendMessage() {
     } catch (err) {
         console.error('Chat error:', err);
         removeTyping();
-        appendMessage('เกิดข้อผิดพลาด กรุณาลองใหม่', 'bot');
+        appendMessage('เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์', 'bot');
     } finally {
         btnSend.disabled = false;
         msgInput.focus();
@@ -152,7 +174,11 @@ msgInput.addEventListener('keydown', e => {
     }
 });
 
-btnAdd.addEventListener('click', () => {
-    // TODO: file/image attachment
-    alert('ฟีเจอร์แนบไฟล์ – เร็วๆ นี้');
+btnLogout.addEventListener('click', (e) => {
+    e.preventDefault();
+    localStorage.clear();
+    window.location.href = 'index.html';
 });
+
+// Run Init
+loadHistory();

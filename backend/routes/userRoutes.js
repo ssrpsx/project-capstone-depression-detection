@@ -17,7 +17,7 @@ router.get('/', async (req, res) => {
 // Get user by id
 router.get('/:id', async (req, res) => {
     try {
-        const [rows] = await db.query('SELECT id, firstname, lastname, username, created_at FROM users WHERE id = ?', [req.params.id]);
+        const [rows] = await db.query('SELECT id, firstname, lastname, username, phone, created_at FROM users WHERE id = ?', [req.params.id]);
         if (rows.length === 0) return res.status(404).json({ error: 'User not found' });
         res.json(rows[0]);
     } catch (error) {
@@ -28,10 +28,10 @@ router.get('/:id', async (req, res) => {
 
 // Create new user
 router.post('/', async (req, res) => {
-    const { firstname, lastname, username, password } = req.body;
+    const { username, password } = req.body;
     try {
-        const [result] = await db.query('INSERT INTO users (firstname, lastname, username, password) VALUES (?, ?, ?, ?)', [firstname, lastname, username, password]);
-        res.status(201).json({ id: result.insertId, firstname, lastname, username });
+        const [result] = await db.query('INSERT INTO users (username, password) VALUES (?, ?)', [username, password]);
+        res.status(201).json({ id: result.insertId, username });
     } catch (error) {
         console.error('Database Error:', error);
         res.status(500).json({ error: 'Failed to create user', details: error.message });
@@ -40,9 +40,9 @@ router.post('/', async (req, res) => {
 
 // Update user
 router.put('/:id', async (req, res) => {
-    const { firstname, lastname, username } = req.body;
+    const { firstname, lastname, username, phone } = req.body;
     try {
-        const [result] = await db.query('UPDATE users SET firstname = ?, lastname = ?, username = ? WHERE id = ?', [firstname, lastname, username, req.params.id]);
+        const [result] = await db.query('UPDATE users SET firstname = ?, lastname = ?, username = ?, phone = ? WHERE id = ?', [firstname, lastname, username, phone, req.params.id]);
         if (result.affectedRows === 0) return res.status(404).json({ error: 'User not found' });
         res.json({ message: 'User updated successfully' });
     } catch (error) {
