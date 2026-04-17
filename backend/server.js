@@ -9,7 +9,7 @@ const chatRoutes = require('./routes/chatRoutes');
 const predictionRoutes = require('./routes/predictionRoutes');
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3306;
 
 // Middleware
 app.use(cors());
@@ -33,6 +33,22 @@ app.get('/api/status', async (req, res) => {
     } catch (error) {
         res.status(500).json({ status: 'Database connection failed', error: error.message });
     }
+});
+
+// วางไว้ก่อนบรรทัด app.listen
+app.on('error', (err) => {
+    console.error('Server error:', err);
+});
+
+// แก้ไขจุด listen เพื่อดูว่ามี error หรือไม่
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
+}).on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    console.error(`Error: Port ${PORT} is already in use. ลองเปลี่ยนเลข Port ดูนะ!`);
+  } else {
+    console.error('Server error:', err);
+  }
 });
 
 // Start Server

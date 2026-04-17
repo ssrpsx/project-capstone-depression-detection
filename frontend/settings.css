@@ -83,7 +83,7 @@
 
 .form-grid.stack {
     grid-template-columns: 1fr;
-    max-width: 400px;
+    max-width: 650px;
 }
 
 .form-group {
