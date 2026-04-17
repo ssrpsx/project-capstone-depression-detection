@@ -29,4 +29,3 @@ CREATE TABLE IF NOT EXISTS predictions (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 
 );
-
