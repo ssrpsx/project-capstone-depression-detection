@@ -27,6 +27,7 @@ const btnLogoutMobile = document.getElementById('btn-logout-mobile');
 
 const fileUpload         = document.getElementById('file-upload');
 const btnUpload          = document.getElementById('btn-upload');
+const avatar_Upload      = document.getElementById('avatar-container');
 const btnDelete          = document.getElementById('btn-delete');
 const settingsProfileImg = document.getElementById('settings-profile-img');
 
@@ -107,6 +108,10 @@ btnLogout.addEventListener('click', () => {
 // ─── Profile Picture Upload ─────────────────
 btnUpload.addEventListener('click', () => {
     fileUpload.click(); // Trigger hidden input
+});
+
+avatar_Upload.addEventListener('click', () => {
+    fileUpload.click();
 });
 
 fileUpload.addEventListener('change', async (e) => {
