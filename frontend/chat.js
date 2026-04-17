@@ -3,8 +3,11 @@
    ══════════════════════════════════════════════ */
 
 const API_CHAT = 'http://localhost:5000/api/chats';
+const API_USER = 'http://localhost:5000/api/users';
 const userId   = localStorage.getItem('user_id');
 const token    = localStorage.getItem('jwt_token');
+
+let userProfilePic = null;
 
 // ─── Auth Guard ─────────────────────────────
 if (!token || !userId) {
@@ -17,8 +20,24 @@ const msgInput          = document.getElementById('msg-input');
 const btnSend           = document.getElementById('btn-send');
 const btnAdd            = document.getElementById('btn-add');
 const btnLogout         = document.getElementById('nav-logout');
-
 // ─── Init Load ────────────────────────────────
+async function loadUserProfile() {
+    if (!userId) return;
+    try {
+        const response = await fetch(`${API_USER}/${userId}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (response.ok) {
+            const user = await response.json();
+            if (user.profile_picture) {
+                userProfilePic = `http://localhost:5000/${user.profile_picture}`;
+            }
+        }
+    } catch (error) {
+        console.error('Error loading user profile:', error);
+    }
+}
+
 async function loadHistory() {
     try {
         const response = await fetch(`${API_CHAT}/user/${userId}`, {
@@ -36,7 +55,7 @@ async function loadHistory() {
             } else {
                 // history returns newest first normally in my route, let's reverse to show chronological
                 history.reverse().forEach(chat => {
-                    appendMessage(chat.chat_text, chat.chat_user ? 'user' : 'bot');
+                    appendMessage(chat.chat_text, chat.chat_user ? 'user' : 'bot', chat.created_at);
                 });
             }
         }
@@ -55,18 +74,25 @@ function scrollBottom() {
 }
 
 // ─── Append message row ───────────────────────
-function appendMessage(text, who /* 'bot' | 'user' */) {
+function appendMessage(text, who /* 'bot' | 'user' */, timestamp = null) {
     const row = document.createElement('div');
     row.className = `msg-row ${who}`;
 
     // avatar
     const av = document.createElement('div');
     av.className = `msg-av ${who === 'bot' ? 'bot-av' : 'user-av'}`;
-    // Using simple icons or dots as in the refined UI
+    
     if (who === 'bot') {
-        av.innerHTML = ''; // Keep it as a blue dot if that's the current CSS style
+        av.innerHTML = ''; 
     } else {
-        av.innerHTML = '<i class="fa-solid fa-user"></i>';
+        if (userProfilePic) {
+            av.style.backgroundImage = `url('${userProfilePic}')`;
+            av.style.backgroundSize = 'cover';
+            av.style.backgroundPosition = 'center';
+            av.innerHTML = '';
+        } else {
+            av.innerHTML = '<i class="fa-solid fa-user"></i>';
+        }
     }
 
     // bubble
@@ -78,7 +104,8 @@ function appendMessage(text, who /* 'bot' | 'user' */) {
 
     const ts = document.createElement('span');
     ts.className = 'msg-ts';
-    ts.textContent = formatTime(new Date());
+    const msgTime = timestamp ? new Date(timestamp) : new Date();
+    ts.textContent = formatTime(msgTime);
 
     bubble.appendChild(p);
     bubble.appendChild(ts);
@@ -173,12 +200,18 @@ msgInput.addEventListener('keydown', e => {
         sendMessage();
     }
 });
-
-btnLogout.addEventListener('click', (e) => {
-    e.preventDefault();
-    localStorage.clear();
-    window.location.href = 'index.html';
-});
+if (btnLogout) {
+    btnLogout.addEventListener('click', (e) => {
+        e.preventDefault();
+        localStorage.clear();
+        window.location.href = 'index.html';
+    });
+}
 
 // Run Init
-loadHistory();
+async function init() {
+    await loadUserProfile();
+    await loadHistory();
+}
+
+init();

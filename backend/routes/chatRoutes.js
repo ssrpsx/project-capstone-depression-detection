@@ -43,9 +43,10 @@ router.get('/user/:user_id', async (req, res) => {
 
 // Create new chat
 router.post('/', async (req, res) => {
-    const { user_id, chat_text } = req.body;
+    const { user_id, chat_text, chat_user } = req.body;
+    const isUser = chat_user === true || chat_user === "true" || chat_user === 1 ? 1 : 0;
     try {
-        const [result] = await db.query('INSERT INTO chats (user_id, chat_text) VALUES (?, ?)', [user_id, chat_text]);
+        const [result] = await db.query('INSERT INTO chats (user_id, chat_text, chat_user) VALUES (?, ?, ?)', [user_id, chat_text, isUser]);
         res.status(201).json({ id: result.insertId, user_id, chat_text });
     } catch (error) {
         console.error('Database Error:', error);

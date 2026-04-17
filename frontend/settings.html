@@ -6,8 +6,26 @@
     <title>JID – Settings</title>
     <link rel="stylesheet" href="chat.css"> <!-- Load shared styles -->
     <link rel="stylesheet" href="settings.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        .profile-img-container {
+            position: relative;
+            cursor: pointer;
+        }
+        .profile-img-container:hover::after {
+            content: 'Change';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.5);
+            color: #fff;
+            font-size: 10px;
+            padding: 2px 0;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
 
@@ -33,15 +51,16 @@
                 </a>
             </nav>
 
+            <!-- Footer nav -->
             <nav class="sidebar-footer">
-                <button class="nav-item footer-item" id="nav-help">
+                <a href="#" class="nav-item footer-item" id="nav-help">
                     <i class="fa-regular fa-circle-question"></i>
                     <span>Help</span>
-                </button>
-                <button class="nav-item footer-item" id="nav-logout">
+                </a>
+                <a href="#" class="nav-item footer-item" id="nav-logout">
                     <i class="fa-solid fa-right-from-bracket"></i>
                     <span>Log out</span>
-                </button>
+                </a>
             </nav>
         </aside>
 
@@ -53,19 +72,20 @@
                 <h1 class="settings-title">Account Setting</h1>
 
                 <div class="profile-header">
-                    <div class="profile-avatar-wrapper">
-                        <img src="https://cdn-icons-png.flaticon.com/512/1998/1998664.png" alt="Profile" class="profile-img">
+                    <div class="profile-avatar-wrapper profile-img-container" id="avatar-container">
+                        <img src="https://cdn-icons-png.flaticon.com/512/1998/1998664.png" alt="Profile" class="profile-img" id="settings-profile-img">
+                        <input type="file" id="file-upload" accept="image/*" style="display:none">
                     </div>
                     <div class="profile-info">
                         <h2 class="profile-name" id="display-name">Loading...</h2>
                         <p class="profile-email" id="display-email"></p>
                         <p class="profile-phone" id="display-phone"></p>
                         <div class="profile-actions">
-                            <button class="btn btn-secondary">Upload Profile</button>
-                            <button class="btn btn-outline">Delete</button>
+                            <button class="btn btn-secondary" id="btn-upload">Upload Profile</button>
+                            <button class="btn btn-outline" id="btn-delete">Delete</button>
                         </div>
                     </div>
-                </div>
+</div>
 
                 <div class="settings-form">
                     <h3 class="form-section-title">Profile</h3>
@@ -119,6 +139,16 @@
                     </div>
 
                     <button class="btn btn-primary btn-full" id="btn-update-settings">Update</button>
+                    
+                    <!-- Moved Actions -->
+                    <div class="mobile-actions" style="gap: 15px; margin-top: 20px;">
+                        <button class="btn btn-outline" style="flex: 1;" id="btn-help-mobile">
+                            <i class="fa-regular fa-circle-question"></i> Help
+                        </button>
+                        <button class="btn btn-outline" style="flex: 1; border-color: #dc3545; color: #dc3545;" id="btn-logout-mobile">
+                            <i class="fa-solid fa-right-from-bracket"></i> Log out
+                        </button>
+                    </div>
                 </div>
             </section>
 

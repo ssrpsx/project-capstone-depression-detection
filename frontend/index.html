@@ -1,56 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Authentication</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
+
 <body>
     <div class="auth-wrapper">
         <div class="auth-container">
+            <div class="logo-container">
+                <h1 class="logo">JID</h1>
+            </div>
+
             <!-- Login Form -->
             <div class="form-box login active" id="login-form">
-                <h2>Welcome Back</h2>
-                <p class="subtitle">Login to continue testing predictions</p>
                 <form id="form-login">
                     <div class="input-group">
-                        <label for="login-email">Email</label>
-                        <input type="email" id="login-email" required placeholder="Enter your email">
+                        <label for="login-email">Email Address</label>
+                        <input type="email" id="login-email" required placeholder="Enter Your Email">
                     </div>
                     <div class="input-group">
                         <label for="login-password">Password</label>
-                        <input type="password" id="login-password" required placeholder="Enter your password">
+                        <div class="password-input-wrapper">
+                            <input type="password" id="login-password" required placeholder="Enter Your Password">
+                            <button type="button" class="toggle-password" onclick="togglePasswordVisibility('login-password')">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="eye-icon"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                            </button>
+                        </div>
                     </div>
-                    <button type="submit" class="primary-btn">Log In</button>
+                    <button type="submit" class="primary-btn">Login</button>
                     <p class="switch-text">Don't have an account? <span onclick="toggleForms()">Sign Up</span></p>
                 </form>
             </div>
 
             <!-- Sign Up Form -->
             <div class="form-box signup" id="signup-form">
-                <h2>Create Account</h2>
-                <p class="subtitle">Join us to get started</p>
                 <form id="form-signup">
                     <div class="input-group">
-                        <label for="signup-email">Email</label>
-                        <input type="email" id="signup-email" required placeholder="Enter your email">
+                        <label for="signup-email">Email Address</label>
+                        <input type="email" id="signup-email" required placeholder="Enter Your Email">
                     </div>
                     <div class="input-group">
                         <label for="signup-password">Password</label>
-                        <input type="password" id="signup-password" required placeholder="Create a password">
+                        <div class="password-input-wrapper">
+                            <input type="password" id="signup-password" required placeholder="Enter Your Password">
+                            <button type="button" class="toggle-password" onclick="togglePasswordVisibility('signup-password')">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="eye-icon"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                            </button>
+                        </div>
                     </div>
                     <div class="input-group">
                         <label for="signup-confirm-password">Confirm Password</label>
-                        <input type="password" id="signup-confirm-password" required placeholder="Confirm your password">
+                        <div class="password-input-wrapper">
+                            <input type="password" id="signup-confirm-password" required placeholder="Enter Your Password">
+                            <button type="button" class="toggle-password" onclick="togglePasswordVisibility('signup-confirm-password')">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="eye-icon"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                            </button>
+                        </div>
                     </div>
-                    <button type="submit" class="primary-btn">Sign Up</button>
-                    <p class="switch-text">Already have an account? <span onclick="toggleForms()">Log In</span></p>
+                    <button type="submit" class="primary-btn">Sign up</button>
+                    <p class="switch-text">Have an account? <span onclick="toggleForms()">Log in</span></p>
                 </form>
             </div>
         </div>
     </div>
     <script src="script.js"></script>
 </body>
+
 </html>

@@ -14,7 +14,7 @@
 html,
 body {
     height: 100%;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Rubik', sans-serif;
     background: #2b2b2b;
     /* dark outer frame */
 }
@@ -26,11 +26,7 @@ body {
     height: 100vh;
     background: #f2f4f7;
     /* light inner bg */
-    max-width: 1100px;
-    margin: 0 auto;
-    border-radius: 0;
     overflow: hidden;
-    box-shadow: 0 0 0 10px #1e1e1e;
 }
 
 /* ══════════════════════════════════
@@ -57,7 +53,7 @@ body {
     color: #5aaccc;
     letter-spacing: 0.04em;
     margin-bottom: 36px;
-    padding-left: 8px;
+    text-align: center;
 }
 
 /* Nav items */
@@ -94,7 +90,7 @@ body {
     border: none;
     background: transparent;
     color: #888;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Rubik', sans-serif;
     font-size: 0.88rem;
     font-weight: 500;
     cursor: pointer;
@@ -182,6 +178,7 @@ body {
     align-items: center;
     /* Vertically center avatar with bubble */
     gap: 15px;
+    width: 100%;
     max-width: 100%;
     margin-bottom: 25px;
     animation: fadeUp 0.25s ease;
@@ -202,11 +199,13 @@ body {
 /* Bot row: avatar left + bubble right */
 .msg-row.bot {
     flex-direction: row;
+    justify-content: flex-start;
 }
 
 /* User row: bubble left + avatar right */
 .msg-row.user {
     flex-direction: row-reverse;
+    justify-content: flex-start; /* flex-start with row-reverse = right-aligned */
 }
 
 /* ── Avatar ── */
@@ -266,14 +265,10 @@ body {
 /* Ensure text doesn't overlap the bar */
 .msg-bubble.bot-bubble {
     padding-left: 28px;
-    margin-right: auto;
-    /* Push away from the center */
 }
 
 .msg-bubble.user-bubble {
     padding-right: 28px;
-    margin-left: auto;
-    /* Push away from the center */
 }
 
 .msg-bubble p {
@@ -296,6 +291,7 @@ body {
 /* ── Typing indicator ── */
 .typing-dots {
     display: flex;
+    flex-direction: row !important;
     align-items: center;
     gap: 5px;
     padding: 14px 18px;
@@ -584,4 +580,99 @@ body {
     margin-top: 40px;
     padding: 14px;
     font-size: 1rem;
+}
+
+/* ══════════════════════════════════
+   MOBILE RESPONSIVENESS (< 768px)
+══════════════════════════════════ */
+@media (max-width: 768px) {
+    /* Stack frame blocks vertically */
+    .frame {
+        flex-direction: column;
+        padding-top: 60px; /* Space for fixed top logo */
+        padding-bottom: 70px; /* Space for fixed bottom nav */
+    }
+
+    /* Transform Sidebar to Bottom Nav */
+    .sidebar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        min-width: 100%;
+        height: 70px;
+        margin: 0;
+        border-radius: 0;
+        padding: 5px 15px;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-around;
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05); /* Upward shadow */
+        background: #ffffff;
+        z-index: 1000;
+    }
+
+    /* Rip logo out and put it at the absolute top center */
+    .sidebar-logo {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 60px;
+        line-height: 60px;
+        margin: 0;
+        background: #ffffff;
+        text-align: center;
+        font-size: 1.8rem;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); /* Downward shadow */
+        z-index: 1000;
+        display: block; /* Override any flex alignments */
+    }
+
+    .sidebar-nav {
+        flex-direction: row;
+        flex: 1;
+        justify-content: space-evenly;
+    }
+
+    .nav-item {
+        padding: 10px;
+        margin-bottom: 0;
+        border-radius: 12px;
+        flex: 1;
+        text-align: center;
+        justify-content: center;
+    }
+
+    /* Hide text on small screens, show only icons */
+    .nav-item span {
+        display: none;
+    }
+    
+    .nav-item i {
+        margin-right: 0;
+        font-size: 1.4rem;
+    }
+
+    /* Hide the footer nav on mobile so they don't clutter bottom nav */
+    .sidebar-footer {
+        display: none;
+    }
+
+    /* Chat Area adjustments */
+    .chat-area {
+        margin: 0;
+        border-radius: 0;
+        padding: 15px;
+        height: calc(100vh - 130px); /* 100vh - (top 60 + bottom 70) */
+    }
+
+    .msg-bubble {
+        max-width: 90%;
+        padding: 12px 18px 8px;
+    }
+
+    .msg-bubble p {
+        font-size: 0.95rem;
+    }
 }

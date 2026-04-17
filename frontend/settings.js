@@ -23,6 +23,12 @@ const inputPhone     = document.getElementById('input-phone');
 
 const btnUpdate = document.getElementById('btn-update-settings');
 const btnLogout = document.getElementById('nav-logout');
+const btnLogoutMobile = document.getElementById('btn-logout-mobile');
+
+const fileUpload         = document.getElementById('file-upload');
+const btnUpload          = document.getElementById('btn-upload');
+const btnDelete          = document.getElementById('btn-delete');
+const settingsProfileImg = document.getElementById('settings-profile-img');
 
 // ─── Load User Data ─────────────────────────
 async function loadUserData() {
@@ -46,6 +52,12 @@ async function loadUserData() {
             inputLastname.value  = user.lastname || '';
             inputEmail.value     = user.username || '';
             inputPhone.value     = user.phone || '';
+
+            // Update profile image if exists
+            if (user.profile_picture) {
+                // Assuming backend serves from /uploads
+                settingsProfileImg.src = `http://localhost:5000/${user.profile_picture}`;
+            }
         } else {
             console.error('Failed to load user:', user.error);
         }
@@ -91,6 +103,84 @@ btnLogout.addEventListener('click', () => {
     localStorage.clear();
     window.location.href = 'index.html';
 });
+
+// ─── Profile Picture Upload ─────────────────
+btnUpload.addEventListener('click', () => {
+    fileUpload.click(); // Trigger hidden input
+});
+
+fileUpload.addEventListener('change', async (e) => {
+    if (!e.target.files[0]) return;
+
+    const formData = new FormData();
+    formData.append('profile_picture', e.target.files[0]);
+
+    try {
+        const response = await fetch(`${API_BASE}/upload-profile-pic/${userId}`, {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${token}` },
+            body: formData
+        });
+
+        const data = await response.json();
+        if (response.ok) {
+            alert('อัปโหลดรูปโปรไฟล์เรียบร้อย!');
+            settingsProfileImg.src = `http://localhost:5000/${data.filePath}`;
+        } else {
+            alert('อัปโหลดล้มเหลว: ' + (data.error || 'Unknown error'));
+        }
+    } catch (error) {
+        console.error('Upload error:', error);
+        alert('เกิดข้อผิดพลาดในการอัปโหลด');
+    }
+});
+
+// ─── Delete Profile ──────────────────────────
+btnDelete.addEventListener('click', async () => {
+    const confirmDelete = confirm('คุณแน่ใจหรือไม่ว่าต้องการลบโปรไฟล์? การดำเนินการนี้ไม่สามารถย้อนกลับได้ และข้อมูลทั้งหมดจะถูกลบ!');
+    
+    if (confirmDelete) {
+        try {
+            const response = await fetch(`${API_BASE}/${userId}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+
+            if (response.ok) {
+                alert('ลบบัญชีของคุณเรียบร้อยแล้ว');
+                localStorage.clear();
+                window.location.href = 'index.html';
+            } else {
+                const data = await response.json();
+                alert('ลบไม่สำเร็จ: ' + (data.error || 'Unknown error'));
+            }
+        } catch (error) {
+            console.error('Delete error:', error);
+            alert('เกิดข้อผิดพลาดในการลบโปรไฟล์');
+        }
+    }
+});
+
+// ─── Logout ──────────────────────────────────
+const performLogout = (e) => {
+    e.preventDefault();
+    localStorage.clear();
+    window.location.href = 'index.html';
+};
+
+if (btnLogout) btnLogout.addEventListener('click', performLogout);
+if (btnLogoutMobile) btnLogoutMobile.addEventListener('click', performLogout);
+
+const handleHelp = (e) => {
+    e.preventDefault();
+    alert('Help feature coming soon!');
+};
+
+const btnHelpDesktop = document.getElementById('nav-help');
+const btnHelpMobile = document.getElementById('btn-help-mobile');
+
+if (btnHelpDesktop) btnHelpDesktop.addEventListener('click', handleHelp);
+if (btnHelpMobile) btnHelpMobile.addEventListener('click', handleHelp);
 
 // Run
 loadUserData();
