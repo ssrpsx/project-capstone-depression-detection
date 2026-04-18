@@ -144,4 +144,35 @@ router.post('/login', async (req, res) => {
     }
 });
 
+// Change user password
+router.put('/change-password/:id', async (req, res) => {
+    const { oldPassword, newPassword } = req.body;
+    
+    if (!oldPassword || !newPassword) {
+        return res.status(400).json({ error: 'Please provide both old and new passwords' });
+    }
+
+    try {
+        // Find user by ID
+        const [rows] = await db.query('SELECT password FROM users WHERE id = ?', [req.params.id]);
+        if (rows.length === 0) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        const user = rows[0];
+
+        // Verify old password
+        if (user.password !== oldPassword) {
+            return res.status(401).json({ error: 'รหัสผ่านปัจจุบันไม่ถูกต้อง' });
+        }
+
+        // Update with new password
+        await db.query('UPDATE users SET password = ? WHERE id = ?', [newPassword, req.params.id]);
+        res.json({ message: 'Password updated successfully' });
+    } catch (error) {
+        console.error('Database Error:', error);
+        res.status(500).json({ error: 'Failed to update password', details: error.message });
+    }
+});
+
 module.exports = router;

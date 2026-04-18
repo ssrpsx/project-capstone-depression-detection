@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JID – Help & FAQ</title>
+    <meta name="description" content="ศูนย์ช่วยเหลือและคำถามที่พบบ่อย – JID แอปพลิเคชันตรวจสอบภาวะซึมเศร้า">
+    <link rel="stylesheet" href="chat.css">
+    <link rel="stylesheet" href="help.css">
+    <link rel="stylesheet" href="dark-mode.css">
+    <script>
+        if (localStorage.getItem('theme') === 'dark') {
+            document.documentElement.classList.add('dark-mode');
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body>
+
+    <!-- ══ OUTER FRAME ══ -->
+    <div class="frame">
+
+        <!-- ══ SIDEBAR ══ -->
+        <aside class="sidebar">
+            <!-- Logo -->
+            <div class="sidebar-logo">JID</div>
+
+            <!-- Main nav -->
+            <nav class="sidebar-nav">
+                <a href="chat.html" class="nav-item" id="nav-chat">
+                    <i class="fa-solid fa-message"></i>
+                    <span>Chat</span>
+                </a>
+                <a href="settings.html" class="nav-item" id="nav-settings">
+                    <i class="fa-solid fa-gear"></i>
+                    <span>Settings</span>
+                </a>
+                <a href="predict.html" class="nav-item" id="nav-predict">
+                    <i class="fa-solid fa-magnifying-glass-chart"></i>
+                    <span>Prediction</span>
+                </a>
+            </nav>
+
+            <!-- Footer nav -->
+            <nav class="sidebar-footer">
+                <a href="help.html" class="nav-item footer-item active" id="nav-help">
+                    <i class="fa-regular fa-circle-question"></i>
+                    <span>Help</span>
+                </a>
+                <a href="#" class="nav-item footer-item" id="nav-logout">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    <span>Log out</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- ══ MAIN AREA ══ -->
+        <main class="main-container">
+            <section class="main-content help-section" id="help-section">
+
+                <!-- Title -->
+                <h1 class="help-title">Help & FAQ <span class="help-title-sub">(คำถามที่พบบ่อย)</span></h1>
+
+                <!-- Search Bar -->
+                <div class="help-search-wrapper">
+                    <input type="search" id="help-search" class="help-search" placeholder="Start Typing Your Search..."
+                        autocomplete="off" />
+                    <i class="fa-solid fa-magnifying-glass help-search-icon"></i>
+                </div>
+
+                <!-- FAQ Accordion -->
+                <div class="faq-list" id="faq-list">
+
+                    <div class="faq-item" id="faq-1">
+                        <button class="faq-question" aria-expanded="false" data-target="faq-answer-1">
+                            <span>โรคซึมเศร้าคืออะไร? แตกต่างจากความเศร้าปกติอย่างไร?</span>
+                            <i class="fa-solid fa-chevron-down faq-chevron"></i>
+                        </button>
+                        <div class="faq-answer" id="faq-answer-1">
+                            <p>
+                                โรคซึมเศร้าเป็นโรคที่ส่งผลต่อสภาพจิตใจที่ทำให้ผู้ป่วยรู้สึกเศร้า ความเบื่อหน่าย
+                                ไม่มีแรงจูงใจ และสูญเสียความสุขในกิจกรรมที่เคยชอบ โดยต่อเนื่องอย่างน้อย 2 สัปดาห์
+                                และส่งผลกระทบต่อการใช้ชีวิตประจำวัน เช่น การทำงาน การนอน ความสัมพันธ์กับคนรอบข้าง
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item" id="faq-2">
+                        <button class="faq-question" aria-expanded="false" data-target="faq-answer-2">
+                            <span>เว็บไซต์นี้ช่วยอะไรได้บ้าง?</span>
+                            <i class="fa-solid fa-chevron-down faq-chevron"></i>
+                        </button>
+                        <div class="faq-answer" id="faq-answer-2">
+                            <p>
+                                เว็บไซต์นี้ใช้ปัญญาประดิษฐ์ (AI) เพื่อช่วยวิเคราะห์ข้อความที่คุณพิมพ์ในแชท
+                                และประเมินความเสี่ยงเบื้องต้นของภาวะซึมเศร้า
+                                นอกจากนี้ยังมีฟีเจอร์ Prediction
+                                ที่วิเคราะห์รูปแบบการสนทนาเพื่อให้ข้อมูลเชิงลึกเพิ่มเติม
+                                แต่ทั้งนี้ผลลัพธ์ที่ได้ไม่ใช่การวินิจฉัยทางการแพทย์
+                                หากมีอาการรุนแรงควรปรึกษาแพทย์ผู้เชี่ยวชาญ
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item" id="faq-3">
+                        <button class="faq-question" aria-expanded="false" data-target="faq-answer-3">
+                            <span>ข้อมูลส่วนตัวและผลตรวจของฉันเป็นความลับหรือไม่?</span>
+                            <i class="fa-solid fa-chevron-down faq-chevron"></i>
+                        </button>
+                        <div class="faq-answer" id="faq-answer-3">
+                            <p>
+                                ข้อมูลทั้งหมดของคุณจะถูกเก็บรักษาไว้อย่างปลอดภัยและไม่เปิดเผยต่อบุคคลภายนอก
+                                เราใช้การเข้ารหัสข้อมูลและระบบ JWT Token เพื่อป้องกันการเข้าถึงโดยไม่ได้รับอนุญาต
+                                คุณสามารถลบบัญชีและข้อมูลทั้งหมดได้ตลอดเวลาผ่านหน้า Settings
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item" id="faq-4">
+                        <button class="faq-question" aria-expanded="false" data-target="faq-answer-4">
+                            <span>AI ที่ใช้ในเว็บไซต์นี้มีความแม่นยำแค่ไหน?</span>
+                            <i class="fa-solid fa-chevron-down faq-chevron"></i>
+                        </button>
+                        <div class="faq-answer" id="faq-answer-4">
+                            <p>
+                                โมเดล AI ของเราผ่านการฝึกฝนด้วยชุดข้อมูลที่เกี่ยวข้องกับภาวะซึมเศร้า อย่างไรก็ตาม
+                                ผลลัพธ์ที่ได้เป็นเพียงการประเมินเบื้องต้นเท่านั้น
+                                ไม่สามารถแทนที่การวินิจฉัยจากจิตแพทย์หรือนักจิตวิทยาได้
+                                กรุณาใช้ข้อมูลนี้เป็นแนวทางในการตัดสินใจพบแพทย์เท่านั้น
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- No Results Message -->
+                <p class="faq-no-results" id="faq-no-results" style="display: none;">
+                    ไม่พบคำถามที่ตรงกับการค้นหา
+                </p>
+
+                <!-- Crisis Support Card -->
+                <div class="crisis-card" id="crisis-card">
+                    <p class="crisis-subtitle">หากคุณกำลังรู้สึกแย่มากๆ หรือมีความคิดอยากทำร้ายตัวเอง</p>
+                    <p class="crisis-text">
+                        โปรดติดต่อสายด่วนสุขภาพจิต <strong>1323</strong>
+                        <span class="crisis-detail">(โทรฟรีตลอด 24 ชั่วโมง)</span>
+                    </p>
+                </div>
+
+            </section>
+        </main>
+
+    </div>
+
+    <script src="help.js"></script>
+</body>
+
+</html>

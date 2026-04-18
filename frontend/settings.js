@@ -12,6 +12,20 @@ if (!token || !userId) {
 }
 
 // ─── DOM Refs ───────────────────────────────
+function togglePasswordVisibility(inputId) {
+    const passwordInput = document.getElementById(inputId);
+    const toggleButton = passwordInput.nextElementSibling;
+    const eyeIcon = toggleButton.querySelector('.eye-icon');
+
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        eyeIcon.innerHTML = `<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line>`;
+    } else {
+        passwordInput.type = 'password';
+        eyeIcon.innerHTML = `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>`;
+    }
+}
+
 const displayName  = document.getElementById('display-name');
 const displayEmail = document.getElementById('display-email');
 const displayPhone = document.getElementById('display-phone');
@@ -22,6 +36,11 @@ const inputEmail     = document.getElementById('input-email');
 const inputPhone     = document.getElementById('input-phone');
 
 const btnUpdate = document.getElementById('btn-update-settings');
+const btnUpdatePassword = document.getElementById('btn-update-password');
+const inputOldPassword = document.getElementById('input-old-password');
+const inputNewPassword = document.getElementById('input-new-password');
+const inputConfirmPassword = document.getElementById('input-confirm-password');
+
 const btnLogout = document.getElementById('nav-logout');
 const btnLogoutMobile = document.getElementById('btn-logout-mobile');
 
@@ -30,6 +49,28 @@ const btnUpload          = document.getElementById('btn-upload');
 const avatar_Upload      = document.getElementById('avatar-container');
 const btnDelete          = document.getElementById('btn-delete');
 const settingsProfileImg = document.getElementById('settings-profile-img');
+const themeToggle        = document.getElementById('theme-toggle');
+const themeLabel         = document.getElementById('theme-label');
+
+// ─── Theme Toggle ───────────────────────────
+if (localStorage.getItem('theme') === 'dark') {
+    themeToggle.checked = true;
+    if (themeLabel) themeLabel.textContent = 'Dark Mode';
+} else {
+    if (themeLabel) themeLabel.textContent = 'Light Mode';
+}
+
+themeToggle.addEventListener('change', (e) => {
+    if (e.target.checked) {
+        document.documentElement.classList.add('dark-mode');
+        localStorage.setItem('theme', 'dark');
+        if (themeLabel) themeLabel.textContent = 'Dark Mode';
+    } else {
+        document.documentElement.classList.remove('dark-mode');
+        localStorage.setItem('theme', 'light');
+        if (themeLabel) themeLabel.textContent = 'Light Mode';
+    }
+});
 
 // ─── Load User Data ─────────────────────────
 async function loadUserData() {
@@ -98,6 +139,48 @@ btnUpdate.addEventListener('click', async () => {
         alert('เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์');
     }
 });
+
+// ─── Update Password ────────────────────────
+btnUpdatePassword.addEventListener('click', async () => {
+    const oldPassword = inputOldPassword.value;
+    const newPassword = inputNewPassword.value;
+    const confirmPassword = inputConfirmPassword.value;
+
+    if (!oldPassword || !newPassword || !confirmPassword) {
+        alert('กรุณากรอกข้อมูลรหัสผ่านให้ครบถ้วน');
+        return;
+    }
+
+    if (newPassword !== confirmPassword) {
+        alert('รหัสผ่านใหม่ไม่ตรงกัน! กรุณาตรวจสอบอีกครั้ง');
+        return;
+    }
+
+    try {
+        const response = await fetch(`${API_BASE}/change-password/${userId}`, {
+            method: 'PUT',
+            headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ oldPassword, newPassword })
+        });
+
+        if (response.ok) {
+            alert('เปลี่ยนรหัสผ่านเรียบร้อยแล้ว!');
+            inputOldPassword.value = '';
+            inputNewPassword.value = '';
+            inputConfirmPassword.value = '';
+        } else {
+            const data = await response.json();
+            alert('ล้มเหลวในการเปลี่ยนรหัสผ่าน: ' + (data.error || 'Unknown error'));
+        }
+    } catch (error) {
+        console.error('Error updating password:', error);
+        alert('เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์');
+    }
+});
+
 
 // ─── Logout ─────────────────────────────────
 btnLogout.addEventListener('click', () => {
@@ -176,16 +259,6 @@ const performLogout = (e) => {
 if (btnLogout) btnLogout.addEventListener('click', performLogout);
 if (btnLogoutMobile) btnLogoutMobile.addEventListener('click', performLogout);
 
-const handleHelp = (e) => {
-    e.preventDefault();
-    alert('Help feature coming soon!');
-};
-
-const btnHelpDesktop = document.getElementById('nav-help');
-const btnHelpMobile = document.getElementById('btn-help-mobile');
-
-if (btnHelpDesktop) btnHelpDesktop.addEventListener('click', handleHelp);
-if (btnHelpMobile) btnHelpMobile.addEventListener('click', handleHelp);
 
 // Run
 loadUserData();

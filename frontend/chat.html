@@ -6,6 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JID – Chat</title>
     <link rel="stylesheet" href="chat.css">
+    <link rel="stylesheet" href="dark-mode.css">
+    <script>
+        if (localStorage.getItem('theme') === 'dark') {
+            document.documentElement.classList.add('dark-mode');
+        }
+    </script>
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
@@ -38,7 +44,7 @@
 
             <!-- Footer nav -->
             <nav class="sidebar-footer">
-                <a href="#" class="nav-item footer-item" id="nav-help">
+                <a href="help.html" class="nav-item footer-item" id="nav-help">
                     <i class="fa-regular fa-circle-question"></i>
                     <span>Help</span>
                 </a>

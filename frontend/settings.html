@@ -1,25 +1,33 @@
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JID – Settings</title>
     <link rel="stylesheet" href="chat.css"> <!-- Load shared styles -->
     <link rel="stylesheet" href="settings.css">
-    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="dark-mode.css">
+    <script>
+        if (localStorage.getItem('theme') === 'dark') {
+            document.documentElement.classList.add('dark-mode');
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         .profile-img-container {
             position: relative;
             cursor: pointer;
         }
+
         .profile-img-container:hover::after {
             content: 'Change';
             position: absolute;
             bottom: 0;
             left: 0;
             right: 0;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0, 0, 0, 0.5);
             color: #fff;
             font-size: 10px;
             padding: 2px 0;
@@ -27,6 +35,7 @@
         }
     </style>
 </head>
+
 <body>
 
     <!-- ══ OUTER FRAME ══ -->
@@ -53,7 +62,7 @@
 
             <!-- Footer nav -->
             <nav class="sidebar-footer">
-                <a href="#" class="nav-item footer-item" id="nav-help">
+                <a href="help.html" class="nav-item footer-item" id="nav-help">
                     <i class="fa-regular fa-circle-question"></i>
                     <span>Help</span>
                 </a>
@@ -73,7 +82,8 @@
 
                 <div class="profile-header">
                     <div class="profile-avatar-wrapper profile-img-container" id="avatar-container">
-                        <img src="https://cdn-icons-png.flaticon.com/512/1998/1998664.png" alt="Profile" class="profile-img" id="settings-profile-img">
+                        <img src="https://cdn-icons-png.flaticon.com/512/1998/1998664.png" alt="Profile"
+                            class="profile-img" id="settings-profile-img">
                         <input type="file" id="file-upload" accept="image/*" style="display:none">
                     </div>
                     <div class="profile-info">
@@ -82,12 +92,24 @@
                         <p class="profile-phone" id="display-phone"></p>
                         <div class="profile-actions">
                             <button class="btn btn-secondary" id="btn-upload">Upload Profile</button>
-                            <button class="btn btn-outline" id="btn-delete">Delete</button>
+                            <button class="btn btn-outline btn-danger" id="btn-delete">Delete</button>
                         </div>
                     </div>
-</div>
+                </div>
 
                 <div class="settings-form">
+                    <h3 class="form-section-title">Preferences</h3>
+                    <div class="form-grid">
+                        <div class="form-group" id="preferences-box"
+                            style="grid-column: 1 / -1; flex-direction: row; align-items: center; justify-content: space-between; border: 1px solid #eee; padding: 15px; border-radius: 10px;">
+                            <label id="theme-label" style="margin: 0; font-size: 1rem;">Light Mode</label>
+                            <label class="switch">
+                                <input type="checkbox" id="theme-toggle">
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
+
                     <h3 class="form-section-title">Profile</h3>
                     <div class="form-grid">
                         <div class="form-group">
@@ -115,37 +137,67 @@
                             </div>
                         </div>
                     </div>
+                    <button class="btn btn-primary btn-full" id="btn-update-settings"
+                        style="margin-top: 15px; margin-bottom: 30px;">Update Profile</button>
 
                     <h3 class="form-section-title">Password</h3>
                     <div class="form-grid stack">
                         <div class="form-group">
                             <label>Current Password</label>
-                            <div class="edit-input-wrapper">
-                                <input type="password" placeholder="Current Password">
+                            <div class="edit-input-wrapper password-input-wrapper">
+                                <input type="password" id="input-old-password" placeholder="Current Password">
+                                <button type="button" class="toggle-password"
+                                    onclick="togglePasswordVisibility('input-old-password')">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" class="eye-icon">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                        <circle cx="12" cy="12" r="3"></circle>
+                                    </svg>
+                                </button>
                             </div>
                         </div>
                         <div class="form-group">
                             <label>New Password</label>
-                            <div class="edit-input-wrapper">
-                                <input type="password" placeholder="New Password">
+                            <div class="edit-input-wrapper password-input-wrapper">
+                                <input type="password" id="input-new-password" placeholder="New Password">
+                                <button type="button" class="toggle-password"
+                                    onclick="togglePasswordVisibility('input-new-password')">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" class="eye-icon">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                        <circle cx="12" cy="12" r="3"></circle>
+                                    </svg>
+                                </button>
                             </div>
                         </div>
                         <div class="form-group">
                             <label>Confirm Password</label>
-                            <div class="edit-input-wrapper">
-                                <input type="password" placeholder="Confirm Password">
+                            <div class="edit-input-wrapper password-input-wrapper">
+                                <input type="password" id="input-confirm-password" placeholder="Confirm Password">
+                                <button type="button" class="toggle-password"
+                                    onclick="togglePasswordVisibility('input-confirm-password')">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" class="eye-icon">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                        <circle cx="12" cy="12" r="3"></circle>
+                                    </svg>
+                                </button>
                             </div>
                         </div>
                     </div>
 
-                    <button class="btn btn-primary btn-full" id="btn-update-settings">Update</button>
-                    
+                    <button class="btn btn-primary btn-full" id="btn-update-password">Change Password</button>
+
                     <!-- Moved Actions -->
                     <div class="mobile-actions" style="gap: 15px; margin-top: 20px;">
-                        <button class="btn btn-outline" style="flex: 1;" id="btn-help-mobile">
+                        <a href="help.html" class="btn btn-outline" style="flex: 1; text-decoration: none; text-align: center;" id="btn-help-mobile">
                             <i class="fa-regular fa-circle-question"></i> Help
-                        </button>
-                        <button class="btn btn-outline" style="flex: 1; border-color: #dc3545; color: #dc3545;" id="btn-logout-mobile">
+                        </a>
+                        <button class="btn btn-outline" style="flex: 1; border-color: #dc3545; color: #dc3545;"
+                            id="btn-logout-mobile">
                             <i class="fa-solid fa-right-from-bracket"></i> Log out
                         </button>
                     </div>
@@ -158,4 +210,5 @@
 
     <script src="settings.js"></script>
 </body>
+
 </html>

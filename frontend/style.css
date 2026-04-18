@@ -9,6 +9,20 @@
     --input-focus: #5499ba44;
 }
 
+input::-ms-reveal,
+input::-ms-clear {
+    display: none;
+}
+
+input::-webkit-contacts-auto-fill-button,
+input::-webkit-credentials-auto-fill-button {
+    visibility: hidden;
+    display: none !important;
+    pointer-events: none;
+    position: absolute;
+    right: 0;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -113,7 +127,7 @@ body {
 
 .toggle-password {
     position: absolute;
-    right: 14px;
+    right: 10px;
     background: none;
     border: none;
     cursor: pointer;
@@ -123,6 +137,7 @@ body {
     align-items: center;
     justify-content: center;
     transition: color 0.2s ease;
+    z-index: 10;
 }
 
 .toggle-password:hover {

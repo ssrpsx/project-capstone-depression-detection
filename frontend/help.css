@@ -1,0 +1,353 @@
+/* ════════════════════════════════════════════
+   help.css  –  JID Help & FAQ Page
+   ════════════════════════════════════════════ */
+
+/* ── Help Section Layout ── */
+.help-section {
+    overflow-y: auto;
+    padding: 36px 48px 40px;
+    scrollbar-width: thin;
+    scrollbar-color: #ccdce6 transparent;
+}
+
+.help-section::-webkit-scrollbar {
+    width: 4px;
+}
+
+.help-section::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.help-section::-webkit-scrollbar-thumb {
+    background: #ccdce6;
+    border-radius: 99px;
+}
+
+/* ── Title ── */
+.help-title {
+    font-size: 1.7rem;
+    font-weight: 700;
+    color: #1e1e1e;
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+.help-title-sub {
+    font-weight: 400;
+    color: #666;
+    font-size: 1.4rem;
+}
+
+/* ── Search Bar ── */
+.help-search-wrapper {
+    position: relative;
+    max-width: 560px;
+    margin: 0 auto 32px;
+}
+
+.help-search {
+    width: 100%;
+    padding: 13px 44px 13px 20px;
+    border: 1.5px solid #e0e0e0;
+    border-radius: 10px;
+    font-family: 'Rubik', 'Sarabun', sans-serif;
+    font-size: 0.92rem;
+    color: #444;
+    background: #fff;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.help-search:focus {
+    border-color: #5aaccc;
+    box-shadow: 0 0 0 3px rgba(90, 172, 204, 0.12);
+}
+
+.help-search::placeholder {
+    color: #bbb;
+}
+
+/* Remove default search input × button on webkit */
+.help-search::-webkit-search-cancel-button {
+    display: none;
+}
+
+.help-search-icon {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #aaa;
+    font-size: 0.9rem;
+    pointer-events: none;
+}
+
+/* ── FAQ List ── */
+.faq-list {
+    max-width: 560px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* ── FAQ Item ── */
+.faq-item {
+    border-radius: 12px;
+    border: 1.5px solid #e8f4f9;
+    background: #fff;
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+}
+
+.faq-item:hover {
+    box-shadow: 0 2px 12px rgba(90, 172, 204, 0.1);
+}
+
+.faq-item.open {
+    border-color: #5aaccc;
+    box-shadow: 0 2px 16px rgba(90, 172, 204, 0.15);
+}
+
+/* ── FAQ Question Button ── */
+.faq-question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 16px 18px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-family: 'Rubik', 'Sarabun', sans-serif;
+    font-size: 0.92rem;
+    font-weight: 500;
+    color: #333;
+    text-align: left;
+    gap: 12px;
+    transition: background 0.15s;
+    border-left: 4px solid #5aaccc;
+}
+
+.faq-question:hover {
+    background: #f5fbff;
+}
+
+.faq-item.open .faq-question {
+    background: #eef7fc;
+    color: #2a7ea5;
+}
+
+.faq-question span {
+    flex: 1;
+    line-height: 1.5;
+}
+
+/* ── Chevron ── */
+.faq-chevron {
+    font-size: 0.8rem;
+    color: #5aaccc;
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+}
+
+.faq-item.open .faq-chevron {
+    transform: rotate(180deg);
+}
+
+/* ── FAQ Answer ── */
+.faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease, padding 0.25s ease;
+    padding: 0 18px;
+}
+
+.faq-item.open .faq-answer {
+    max-height: 500px;
+    padding: 14px 18px 18px;
+}
+
+.faq-answer p {
+    font-size: 0.9rem;
+    line-height: 1.75;
+    color: #555;
+    margin: 0;
+}
+
+/* ── Help Link inside answer ── */
+.help-link {
+    color: #5aaccc;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.help-link:hover {
+    color: #3a8fb5;
+    text-decoration: underline;
+}
+
+/* ── No Results ── */
+.faq-no-results {
+    text-align: center;
+    color: #aaa;
+    font-size: 0.9rem;
+    max-width: 560px;
+    margin: 8px auto 0;
+}
+
+/* ── Crisis Card ── */
+.crisis-card {
+    max-width: 560px;
+    margin: 36px auto 0;
+    background: linear-gradient(135deg, #fff0f0 0%, #ffe4e4 100%);
+    border: 1.5px solid #f5c6c6;
+    border-radius: 14px;
+    padding: 20px 28px;
+    text-align: center;
+}
+
+.crisis-subtitle {
+    font-size: 0.85rem;
+    color: #c0504d;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.crisis-text {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #b03030;
+    margin: 0;
+    line-height: 1.6;
+}
+
+.crisis-detail {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: #b85a5a;
+    margin-top: 4px;
+}
+
+/* ── Footer Help nav item – active uses accent blue ── */
+.footer-item.active {
+    background: #c7e3f0 !important;
+    color: #3a8fb5 !important;
+    font-weight: 600;
+}
+
+/* ══════════════════════════════════
+   DARK MODE
+══════════════════════════════════ */
+html.dark-mode .help-section {
+    background: #252525;
+}
+
+html.dark-mode .help-title {
+    color: #eaeaea;
+}
+
+html.dark-mode .help-title-sub {
+    color: #aaa;
+}
+
+html.dark-mode .help-search {
+    background: #333;
+    border-color: #444;
+    color: #eaeaea;
+}
+
+html.dark-mode .help-search:focus {
+    border-color: #5aaccc;
+    box-shadow: 0 0 0 3px rgba(90, 172, 204, 0.2);
+}
+
+html.dark-mode .help-search::placeholder {
+    color: #666;
+}
+
+html.dark-mode .help-search-icon {
+    color: #666;
+}
+
+html.dark-mode .faq-item {
+    background: #2e2e2e;
+    border-color: #3a3a3a;
+}
+
+html.dark-mode .faq-item:hover {
+    box-shadow: 0 2px 12px rgba(90, 172, 204, 0.15);
+}
+
+html.dark-mode .faq-item.open {
+    border-color: #5aaccc;
+}
+
+html.dark-mode .faq-question {
+    color: #eaeaea;
+}
+
+html.dark-mode .faq-question:hover {
+    background: #3a3a3a;
+}
+
+html.dark-mode .faq-item.open .faq-question {
+    background: #2a3f4a;
+    color: #72c6e8;
+}
+
+html.dark-mode .faq-answer p {
+    color: #bbb;
+}
+
+html.dark-mode .crisis-card {
+    background: linear-gradient(135deg, #3a1f1f 0%, #2e1a1a 100%);
+    border-color: #5a2f2f;
+}
+
+html.dark-mode .crisis-subtitle {
+    color: #e87070;
+}
+
+html.dark-mode .crisis-text {
+    color: #f0a0a0;
+}
+
+html.dark-mode .crisis-detail {
+    color: #cc8080;
+}
+
+html.dark-mode .faq-no-results {
+    color: #666;
+}
+
+html.dark-mode .footer-item.active {
+    background: #5aaccc !important;
+    color: #fff !important;
+}
+
+/* ══════════════════════════════════
+   MOBILE RESPONSIVENESS (< 768px)
+══════════════════════════════════ */
+@media (max-width: 768px) {
+    .help-section {
+        padding: 20px 16px 30px;
+    }
+
+    .help-title {
+        font-size: 1.3rem;
+        margin-bottom: 20px;
+    }
+
+    .help-title-sub {
+        font-size: 1.1rem;
+    }
+
+    .crisis-card {
+        margin: 24px 0 0;
+    }
+}

@@ -4,23 +4,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JID – Chat</title>
+    <title>JID – Prediction</title>
+    <meta name="description" content="วิเคราะห์ความน่าจะเป็นของภาวะซึมเศร้าด้วย AI – JID">
     <link rel="stylesheet" href="predict.css">
-    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="predict-page.css">
+    <link rel="stylesheet" href="dark-mode.css">
+    <script>
+        if (localStorage.getItem('theme') === 'dark') {
+            document.documentElement.classList.add('dark-mode');
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 
 <body>
 
-    <!-- ══ OUTER FRAME ══ -->
     <div class="frame">
 
         <!-- ══ SIDEBAR ══ -->
         <aside class="sidebar">
-            <!-- Logo -->
             <div class="sidebar-logo">JID</div>
 
-            <!-- Main nav -->
             <nav class="sidebar-nav">
                 <a href="chat.html" class="nav-item" id="nav-chat">
                     <i class="fa-solid fa-message"></i>
@@ -36,9 +41,8 @@
                 </a>
             </nav>
 
-            <!-- Footer nav -->
             <nav class="sidebar-footer">
-                <a href="#" class="nav-item footer-item" id="nav-help">
+                <a href="help.html" class="nav-item footer-item" id="nav-help">
                     <i class="fa-regular fa-circle-question"></i>
                     <span>Help</span>
                 </a>
@@ -48,8 +52,136 @@
                 </a>
             </nav>
         </aside>
+
+        <!-- ══ MAIN AREA ══ -->
+        <main class="main-container">
+            <section class="predict-section" id="predict-section">
+
+                <!-- Header -->
+                <div class="predict-header">
+                    <h1 class="predict-title">Depression Prediction</h1>
+                    <p class="predict-subtitle">อัปโหลดไฟล์ข้อมูลเพื่อให้ AI วิเคราะห์ความน่าจะเป็นของภาวะซึมเศร้า</p>
+                </div>
+
+                <!-- ── STEP 1: Upload Zone ── -->
+                <div class="predict-card upload-card" id="upload-card">
+                    <div class="card-step-badge">01</div>
+                    <h2 class="card-title">อัปโหลดข้อมูล</h2>
+
+                    <div class="drop-zone" id="drop-zone">
+                        <input type="file" id="file-input" accept=".csv,.json,.txt" hidden>
+                        <div class="drop-zone-inner" id="drop-zone-inner">
+                            <div class="drop-icon-wrap">
+                                <i class="fa-solid fa-cloud-arrow-up drop-icon"></i>
+                            </div>
+                            <p class="drop-title">ลากไฟล์มาวางที่นี่</p>
+                            <p class="drop-sub">หรือ</p>
+                            <button class="btn-upload" id="btn-browse" type="button">
+                                <i class="fa-solid fa-folder-open"></i> เลือกไฟล์
+                            </button>
+                            <p class="drop-hint">รองรับ: CSV, JSON, TXT · ขนาดสูงสุด 10 MB</p>
+                        </div>
+
+                        <!-- File selected state -->
+                        <div class="file-selected" id="file-selected" style="display:none;">
+                            <div class="file-icon-wrap">
+                                <i class="fa-solid fa-file-csv file-icon"></i>
+                            </div>
+                            <div class="file-info">
+                                <p class="file-name" id="file-name">data.csv</p>
+                                <p class="file-size" id="file-size">2.4 MB</p>
+                            </div>
+                            <button class="btn-remove" id="btn-remove" type="button" title="ลบไฟล์">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <button class="btn-analyze" id="btn-analyze" type="button" disabled>
+                        <i class="fa-solid fa-brain"></i>
+                        วิเคราะห์ด้วย AI
+                    </button>
+                </div>
+
+                <!-- ── STEP 2: Analyzing (hidden by default) ── -->
+                <div class="predict-card analyzing-card" id="analyzing-card" style="display:none;">
+                    <div class="analyzing-anim">
+                        <span></span><span></span><span></span><span></span><span></span>
+                    </div>
+                    <p class="analyzing-text">AI กำลังวิเคราะห์ข้อมูลของคุณ...</p>
+                    <div class="progress-bar-wrap">
+                        <div class="progress-bar-track">
+                            <div class="progress-bar-fill" id="progress-fill"></div>
+                        </div>
+                        <span class="progress-pct" id="progress-pct">0%</span>
+                    </div>
+                </div>
+
+                <!-- ── STEP 3: Result (hidden by default) ── -->
+                <div class="predict-card result-card" id="result-card" style="display:none;">
+                    <div class="card-step-badge">02</div>
+                    <h2 class="card-title">ผลการวิเคราะห์</h2>
+
+                    <!-- Gauge + Verdict -->
+                    <div class="result-body">
+
+                        <!-- Gauge -->
+                        <div class="gauge-wrap">
+                            <svg class="gauge-svg" viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+                                <!-- Background arc -->
+                                <path class="gauge-bg" d="M 20 110 A 80 80 0 0 1 180 110" fill="none" stroke-width="18" stroke-linecap="round"/>
+                                <!-- Colored arc -->
+                                <path class="gauge-arc" id="gauge-arc" d="M 20 110 A 80 80 0 0 1 180 110" fill="none" stroke-width="18" stroke-linecap="round"
+                                    stroke-dasharray="251.2" stroke-dashoffset="251.2"/>
+                            </svg>
+                            <div class="gauge-center">
+                                <span class="gauge-pct" id="gauge-pct">0%</span>
+                                <span class="gauge-label">ความน่าจะเป็น</span>
+                            </div>
+                        </div>
+
+                        <!-- Verdict -->
+                        <div class="verdict-wrap" id="verdict-wrap">
+                            <div class="verdict-badge" id="verdict-badge">
+                                <i class="fa-solid fa-circle-check verdict-icon" id="verdict-icon"></i>
+                                <span class="verdict-text" id="verdict-text">ผลลัพธ์</span>
+                            </div>
+                            <p class="verdict-desc" id="verdict-desc">รอผลการวิเคราะห์</p>
+
+                            <!-- Detail row -->
+                            <div class="result-details">
+                                <div class="detail-item">
+                                    <span class="detail-label">ไฟล์ที่วิเคราะห์</span>
+                                    <span class="detail-value" id="result-filename">–</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">ระดับความเสี่ยง</span>
+                                    <span class="detail-value" id="result-level">–</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">วันที่วิเคราะห์</span>
+                                    <span class="detail-value" id="result-date">–</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="result-actions">
+                        <button class="btn-reset" id="btn-reset" type="button">
+                            <i class="fa-solid fa-rotate-left"></i> วิเคราะห์ใหม่
+                        </button>
+                        <button class="btn-save" id="btn-save" type="button">
+                            <i class="fa-solid fa-floppy-disk"></i> บันทึกผล
+                        </button>
+                    </div>
+                </div>
+
+            </section>
+        </main>
     </div>
 
-    <script src="chat.js"></script>
+    <script src="predict.js"></script>
 </body>
+
 </html>
