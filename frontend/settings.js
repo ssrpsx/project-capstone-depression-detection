@@ -2,7 +2,7 @@
    settings.js  –  JID Settings Page
    ══════════════════════════════════════════════ */
 
-const API_BASE = 'http://localhost:5000/api/users';
+const API_BASE = 'http://localhost:3000/api/users';
 const userId   = localStorage.getItem('user_id');
 const token    = localStorage.getItem('jwt_token');
 
@@ -98,7 +98,7 @@ async function loadUserData() {
             // Update profile image if exists
             if (user.profile_picture) {
                 // Assuming backend serves from /uploads
-                settingsProfileImg.src = `http://localhost:5000/${user.profile_picture}`;
+                settingsProfileImg.src = `http://localhost:3000/${user.profile_picture}`;
             }
         } else {
             console.error('Failed to load user:', user.error);
@@ -213,7 +213,7 @@ fileUpload.addEventListener('change', async (e) => {
         const data = await response.json();
         if (response.ok) {
             alert('อัปโหลดรูปโปรไฟล์เรียบร้อย!');
-            settingsProfileImg.src = `http://localhost:5000/${data.filePath}`;
+            settingsProfileImg.src = `http://localhost:3000/${data.filePath}`;
         } else {
             alert('อัปโหลดล้มเหลว: ' + (data.error || 'Unknown error'));
         }

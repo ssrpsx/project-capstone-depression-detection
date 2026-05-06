@@ -19,8 +19,8 @@ app.use(express.json());
 
 // Serve uploaded files
 const uploadsDir = path.join(__dirname, 'uploads');
-if (!fs.existsSync(uploadsDir)){
-    fs.mkdirSync(uploadsDir);
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir);
 }
 app.use('/uploads', express.static(uploadsDir));
 
@@ -36,17 +36,17 @@ app.use('/api/predictions', predictionRoutes);
 
 // Status Route
 app.get('/api/status', async (req, res) => {
-    try {
-        await db.query('SELECT 1');
-        res.json({ status: 'Database connected successfully' });
-    } catch (error) {
-        res.status(500).json({ status: 'Database connection failed', error: error.message });
-    }
+  try {
+    await db.query('SELECT 1');
+    res.json({ status: 'Database connected successfully' });
+  } catch (error) {
+    res.status(500).json({ status: 'Database connection failed', error: error.message });
+  }
 });
 
 // วางไว้ก่อนบรรทัด app.listen
 app.on('error', (err) => {
-    console.error('Server error:', err);
+  console.error('Server error:', err);
 });
 
 // แก้ไขจุด listen เพื่อดูว่ามี error หรือไม่

@@ -50,6 +50,8 @@ const verdictDesc    = document.getElementById('verdict-desc');
 const resultFilename = document.getElementById('result-filename');
 const resultLevel    = document.getElementById('result-level');
 const resultDate     = document.getElementById('result-date');
+const stftContainer  = document.getElementById('stft-container');
+const stftImage      = document.getElementById('stft-image');
 
 let selectedFile = null;
 
@@ -128,28 +130,30 @@ async function startAnalysis() {
         // Build form data
         const formData = new FormData();
         formData.append('file', selectedFile);
-        formData.append('user_id', userId);
 
-        // TODO: replace with real endpoint
-        // const res = await fetch('http://localhost:5000/api/predict', {
-        //     method: 'POST',
-        //     headers: { 'Authorization': `Bearer ${token}` },
-        //     body: formData
-        // });
-        // const data = await res.json();
-
-        // ── Mock result (remove when backend ready) ──
-        await new Promise(r => setTimeout(r, 2800));
-        const mockProbability = Math.random(); // 0–1
-        const data = { probability: mockProbability };
-        // ─────────────────────────────────────────────
+        // Fetch to Python AI API
+        const res = await fetch('http://localhost:5000/api/predict', {
+            method: 'POST',
+            body: formData
+        });
+        
+        if (!res.ok) {
+            let errorMsg = 'API Error';
+            try {
+                const errData = await res.json();
+                errorMsg = errData.error || errorMsg;
+            } catch (e) {}
+            throw new Error(errorMsg);
+        }
+        
+        const data = await res.json();
 
         clearInterval(interval);
         progressFill.style.width = '100%';
         progressPct.textContent  = '100%';
 
         await new Promise(r => setTimeout(r, 400));
-        showResult(data.probability, selectedFile.name);
+        showResult(data.probability_mdd, selectedFile.name, data.stft_image_base64);
 
     } catch (err) {
         clearInterval(interval);
@@ -160,7 +164,7 @@ async function startAnalysis() {
 }
 
 // ─── Show Result ─────────────────────────────
-function showResult(probability, filename) {
+function showResult(probability, filename, stftImageBase64) {
     analyzingCard.style.display = 'none';
     resultCard.style.display    = '';
 
@@ -228,6 +232,14 @@ function showResult(probability, filename) {
         year: 'numeric', month: 'long', day: 'numeric',
         hour: '2-digit', minute: '2-digit'
     });
+    
+    // STFT Image
+    if (stftImageBase64) {
+        stftImage.src = stftImageBase64;
+        stftContainer.style.display = 'block';
+    } else {
+        stftContainer.style.display = 'none';
+    }
 }
 
 // ─── Reset ───────────────────────────────────
@@ -238,6 +250,8 @@ function resetView() {
     uploadCard.style.display    = '';
     progressFill.style.width    = '0%';
     progressPct.textContent     = '0%';
+    stftContainer.style.display = 'none';
+    stftImage.src               = '';
 }
 
 btnReset.addEventListener('click', resetView);

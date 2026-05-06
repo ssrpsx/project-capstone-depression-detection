@@ -31,7 +31,7 @@ document.getElementById('form-login').addEventListener('submit', async function 
     const password = document.getElementById('login-password').value;
 
     try {
-        const response = await fetch('http://localhost:5000/api/users/login', {
+        const response = await fetch('http://localhost:3000/api/users/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username: email, password })
@@ -64,7 +64,7 @@ document.getElementById('form-signup').addEventListener('submit', async function
     }
 
     try {
-        const response = await fetch('http://localhost:5000/api/users', {
+        const response = await fetch('http://localhost:3000/api/users', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username: email, password, firstname: '', lastname: '' })

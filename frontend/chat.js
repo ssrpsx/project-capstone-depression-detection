@@ -2,8 +2,8 @@
    chat.js  –  JID Chat App
    ══════════════════════════════════════════════ */
 
-const API_CHAT = 'http://localhost:5000/api/chats';
-const API_USER = 'http://localhost:5000/api/users';
+const API_CHAT = 'http://localhost:3000/api/chats';
+const API_USER = 'http://localhost:3000/api/users';
 const userId   = localStorage.getItem('user_id');
 const token    = localStorage.getItem('jwt_token');
 
@@ -30,7 +30,7 @@ async function loadUserProfile() {
         if (response.ok) {
             const user = await response.json();
             if (user.profile_picture) {
-                userProfilePic = `http://localhost:5000/${user.profile_picture}`;
+                userProfilePic = `http://localhost:3000/${user.profile_picture}`;
             }
         }
     } catch (error) {

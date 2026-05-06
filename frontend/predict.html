@@ -69,7 +69,7 @@
                     <h2 class="card-title">อัปโหลดข้อมูล</h2>
 
                     <div class="drop-zone" id="drop-zone">
-                        <input type="file" id="file-input" accept=".csv,.json,.txt" hidden>
+                        <input type="file" id="file-input" accept=".edf" hidden>
                         <div class="drop-zone-inner" id="drop-zone-inner">
                             <div class="drop-icon-wrap">
                                 <i class="fa-solid fa-cloud-arrow-up drop-icon"></i>
@@ -79,13 +79,13 @@
                             <button class="btn-upload" id="btn-browse" type="button">
                                 <i class="fa-solid fa-folder-open"></i> เลือกไฟล์
                             </button>
-                            <p class="drop-hint">รองรับ: CSV, JSON, TXT · ขนาดสูงสุด 10 MB</p>
+                            <p class="drop-hint">รองรับ: EDF · ขนาดสูงสุด 100 MB</p>
                         </div>
 
                         <!-- File selected state -->
                         <div class="file-selected" id="file-selected" style="display:none;">
                             <div class="file-icon-wrap">
-                                <i class="fa-solid fa-file-csv file-icon"></i>
+                                <i class="fa-solid fa-file-medical file-icon"></i>
                             </div>
                             <div class="file-info">
                                 <p class="file-name" id="file-name">data.csv</p>
@@ -164,6 +164,12 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    
+                    <!-- STFT Image -->
+                    <div class="stft-container" id="stft-container" style="display: none; text-align: center; margin-top: 20px; padding: 15px; border-top: 1px solid var(--border-color);">
+                        <h3 style="font-size: 1rem; color: var(--text-color); margin-bottom: 15px; font-weight: 500;">STFT Spectrogram (สัญญาณสมอง 5 วินาทีแรก)</h3>
+                        <img id="stft-image" src="" alt="STFT Spectrogram" style="max-width: 100%; border-radius: 8px; border: 1px solid var(--border-color);">
                     </div>
 
                     <!-- Actions -->
