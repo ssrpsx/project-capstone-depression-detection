@@ -83,6 +83,9 @@ function appendMessage(text, who /* 'bot' | 'user' */, timestamp = null) {
     av.className = `msg-av ${who === 'bot' ? 'bot-av' : 'user-av'}`;
     
     if (who === 'bot') {
+        av.style.backgroundImage = `url('icon.png')`;
+        av.style.backgroundSize = 'cover';
+        av.style.backgroundPosition = 'center';
         av.innerHTML = ''; 
     } else {
         if (userProfilePic) {
@@ -125,6 +128,9 @@ function showTyping() {
 
     const av = document.createElement('div');
     av.className = 'msg-av bot-av';
+    av.style.backgroundImage = `url('icon.png')`;
+    av.style.backgroundSize = 'cover';
+    av.style.backgroundPosition = 'center';
 
     const bubble = document.createElement('div');
     bubble.className = 'msg-bubble bot-bubble typing-dots';
@@ -153,33 +159,24 @@ async function sendMessage() {
     showTyping();
 
     try {
-        // 2. Save to database
-        await fetch(API_CHAT, {
+        // 2. Call new reply endpoint
+        const response = await fetch(`${API_CHAT}/reply`, {
             method: 'POST',
             headers: { 
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify({ user_id: userId, chat_text: text, chat_user: true })
+            body: JSON.stringify({ user_id: userId, chat_text: text })
         });
-
-        // 3. AI response placeholder
-        // TODO: Replace with real AI API call
-        await new Promise(r => setTimeout(r, 1500));
-        const reply = "ขอบคุณที่บอกเล่าเรื่องราวให้ฟังนะครับ ฉันยินดีรับฟังเสมอครับ [AI Mock Response]";
-
-        // 4. Save AI response to DB (Optional, but keeps history consistent)
-        await fetch(API_CHAT, {
-            method: 'POST',
-            headers: { 
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({ user_id: userId, chat_text: reply, chat_user: false })
-        });
-
+        
+        const data = await response.json();
         removeTyping();
-        appendMessage(reply, 'bot');
+
+        if (response.ok) {
+            appendMessage(data.reply, 'bot');
+        } else {
+            appendMessage('เกิดข้อผิดพลาดจาก AI: ' + (data.error || 'Unknown error'), 'bot');
+        }
 
     } catch (err) {
         console.error('Chat error:', err);

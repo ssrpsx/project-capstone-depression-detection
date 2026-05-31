@@ -1,13 +1,10 @@
 import os
-import io
-import base64
 import tempfile
 import numpy as np
 import mne
 import torch
 import torch.nn as nn
 import torchaudio
-import matplotlib.pyplot as plt
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
@@ -96,33 +93,28 @@ def process_and_predict(file_path):
     stft = torchaudio.transforms.Spectrogram(n_fft=128, hop_length=32, power=2.0)
     spec = torch.log1p(stft(epochs_tensor)) # Shape: (N, 19, Freq, Time)
     
-    # 7. Generate STFT image of the first channel from the FIRST epoch for visualization
-    plt.figure(figsize=(10, 4))
-    plt.imshow(spec[0, 0].numpy(), aspect='auto', origin='lower', cmap='viridis')
-    plt.title(f'STFT Spectrogram (Channel 1 - Epoch 1 of {len(epochs)})')
-    plt.xlabel('Time Frames')
-    plt.ylabel('Frequency Bins')
-    plt.colorbar(format='%+2.0f dB')
-    
-    buf = io.BytesIO()
-    plt.savefig(buf, format='png', bbox_inches='tight')
-    plt.close()
-    buf.seek(0)
-    img_base64 = base64.b64encode(buf.read()).decode('utf-8')
-    
-    # 8. Model Prediction (Batch process all epochs)
+    # 7. Model Prediction (Batch process all epochs)
     input_tensor = spec.to(DEVICE) # Shape: (N, 19, Freq, Time)
     with torch.no_grad():
         outputs = model(input_tensor)
         probabilities = torch.softmax(outputs, dim=1)
-        
+
     # Average probabilities across all epochs
     avg_probabilities = probabilities.mean(dim=0)
     prob_mdd = avg_probabilities[1].item()
-        
     prediction = "MDD" if prob_mdd > 0.5 else "Healthy"
-    
-    return prediction, prob_mdd, img_base64
+
+    # 8. Per-epoch MDD probabilities for timeline chart
+    epoch_probs = [round(float(p), 4) for p in probabilities[:, 1].cpu().numpy()]
+
+    # 9. Frequency band powers averaged across all channels and epochs
+    # spec shape: (N_epochs, 19_channels, Freq_bins, Time_frames)
+    # Freq resolution = sample_rate / n_fft = 128 / 128 = 1 Hz per bin
+    avg_spectrum = spec.mean(dim=3).mean(dim=1).mean(dim=0)  # shape: (Freq_bins,)
+    band_def = [('Delta', 0, 4), ('Theta', 4, 8), ('Alpha', 8, 13), ('Beta', 13, 30), ('Gamma', 30, 65)]
+    band_powers = {name: round(float(avg_spectrum[lo:hi].mean().item()), 4) for name, lo, hi in band_def}
+
+    return prediction, prob_mdd, epoch_probs, band_powers
 
 @app.route('/api/predict', methods=['POST'])
 def predict():
@@ -136,13 +128,14 @@ def predict():
         filepath = os.path.join(tempfile.gettempdir(), file.filename)
         file.save(filepath)
         try:
-            prediction, probability, img_base64 = process_and_predict(filepath)
+            prediction, probability, epoch_probs, band_powers = process_and_predict(filepath)
             os.remove(filepath)
             return jsonify({
                 'prediction': prediction,
                 'probability_mdd': float(probability),
                 'probability_mdd_percent': f"{probability * 100:.2f}%",
-                'stft_image_base64': f"data:image/png;base64,{img_base64}"
+                'epoch_probabilities': epoch_probs,
+                'band_powers': band_powers
             })
         except Exception as e:
             if os.path.exists(filepath):

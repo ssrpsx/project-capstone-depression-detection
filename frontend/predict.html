@@ -16,6 +16,39 @@
     </script>
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        .chart-container {
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color, #e8f4f9);
+        }
+        .chart-section-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-color, #334155);
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .chart-section-title i { color: #5499ba; }
+        .chart-wrap {
+            margin-bottom: 28px;
+        }
+        .chart-wrap:last-child { margin-bottom: 0; }
+        .chart-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 10px;
+            font-family: 'Rubik', sans-serif;
+        }
+        html.dark-mode .chart-section-title { color: #eaeaea; }
+        html.dark-mode .chart-label { color: #666; }
+    </style>
 </head>
 
 <body>
@@ -166,10 +199,19 @@
                         </div>
                     </div>
                     
-                    <!-- STFT Image -->
-                    <div class="stft-container" id="stft-container" style="display: none; text-align: center; margin-top: 20px; padding: 15px; border-top: 1px solid var(--border-color);">
-                        <h3 style="font-size: 1rem; color: var(--text-color); margin-bottom: 15px; font-weight: 500;">STFT Spectrogram (สัญญาณสมอง 5 วินาทีแรก)</h3>
-                        <img id="stft-image" src="" alt="STFT Spectrogram" style="max-width: 100%; border-radius: 8px; border: 1px solid var(--border-color);">
+                    <!-- Charts -->
+                    <div class="chart-container" id="chart-container" style="display:none;">
+                        <p class="chart-section-title">
+                            <i class="fa-solid fa-chart-line"></i> กราฟผลการวิเคราะห์
+                        </p>
+                        <div class="chart-wrap">
+                            <p class="chart-label">ความเสี่ยง MDD แต่ละช่วงเวลา (5 วินาที / epoch)</p>
+                            <canvas id="epochChart"></canvas>
+                        </div>
+                        <div class="chart-wrap">
+                            <p class="chart-label">พลังงานคลื่นสมองแต่ละย่านความถี่</p>
+                            <canvas id="bandChart"></canvas>
+                        </div>
                     </div>
 
                     <!-- Actions -->

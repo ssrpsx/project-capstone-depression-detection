@@ -50,8 +50,9 @@ const verdictDesc    = document.getElementById('verdict-desc');
 const resultFilename = document.getElementById('result-filename');
 const resultLevel    = document.getElementById('result-level');
 const resultDate     = document.getElementById('result-date');
-const stftContainer  = document.getElementById('stft-container');
-const stftImage      = document.getElementById('stft-image');
+const chartContainer = document.getElementById('chart-container');
+let epochChartInst   = null;
+let bandChartInst    = null;
 
 let selectedFile = null;
 
@@ -153,7 +154,7 @@ async function startAnalysis() {
         progressPct.textContent  = '100%';
 
         await new Promise(r => setTimeout(r, 400));
-        showResult(data.probability_mdd, selectedFile.name, data.stft_image_base64);
+        showResult(data.probability_mdd, selectedFile.name, data.epoch_probabilities, data.band_powers);
 
     } catch (err) {
         clearInterval(interval);
@@ -164,7 +165,7 @@ async function startAnalysis() {
 }
 
 // ─── Show Result ─────────────────────────────
-function showResult(probability, filename, stftImageBase64) {
+function showResult(probability, filename, epochProbs, bandPowers) {
     analyzingCard.style.display = 'none';
     resultCard.style.display    = '';
 
@@ -233,13 +234,104 @@ function showResult(probability, filename, stftImageBase64) {
         hour: '2-digit', minute: '2-digit'
     });
     
-    // STFT Image
-    if (stftImageBase64) {
-        stftImage.src = stftImageBase64;
-        stftContainer.style.display = 'block';
+    // Charts
+    if (epochProbs && epochProbs.length > 0) {
+        renderCharts(epochProbs, bandPowers || {});
+        chartContainer.style.display = 'block';
     } else {
-        stftContainer.style.display = 'none';
+        chartContainer.style.display = 'none';
     }
+}
+
+// ─── Render Charts ───────────────────────────
+function renderCharts(epochProbs, bandPowers) {
+    const isDark  = document.documentElement.classList.contains('dark-mode');
+    const textClr = isDark ? '#999' : '#64748b';
+    const gridClr = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)';
+
+    if (epochChartInst) epochChartInst.destroy();
+    if (bandChartInst)  bandChartInst.destroy();
+
+    // ── Epoch timeline chart ──────────────────
+    const epochLabels = epochProbs.map((_, i) => `${i * 5}–${(i + 1) * 5}s`);
+    const epochColors = epochProbs.map(p =>
+        p >= 0.7 ? 'rgba(224,85,85,0.85)' :
+        p >= 0.4 ? 'rgba(224,136,0,0.85)' :
+                   'rgba(26,143,92,0.85)'
+    );
+
+    epochChartInst = new Chart(document.getElementById('epochChart'), {
+        type: 'bar',
+        data: {
+            labels: epochLabels,
+            datasets: [{
+                data: epochProbs.map(p => +(p * 100).toFixed(1)),
+                backgroundColor: epochColors,
+                borderRadius: 5,
+                borderSkipped: false
+            }]
+        },
+        options: {
+            responsive: true,
+            animation: { duration: 700, easing: 'easeOutQuart' },
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: { label: ctx => `${ctx.parsed.y.toFixed(1)}% MDD Risk` }
+                }
+            },
+            scales: {
+                y: {
+                    min: 0, max: 100,
+                    ticks: { color: textClr, callback: v => v + '%' },
+                    grid:  { color: gridClr }
+                },
+                x: {
+                    ticks: { color: textClr, maxRotation: 45, font: { size: 11 } },
+                    grid:  { display: false }
+                }
+            }
+        }
+    });
+
+    // ── Frequency band chart ──────────────────
+    const bandLabels = Object.keys(bandPowers);
+    const bandValues = Object.values(bandPowers);
+    const bandPalette = ['#5499ba', '#5aaccc', '#3b82f6', '#8b5cf6', '#ec4899'];
+
+    bandChartInst = new Chart(document.getElementById('bandChart'), {
+        type: 'bar',
+        data: {
+            labels: bandLabels,
+            datasets: [{
+                data: bandValues,
+                backgroundColor: bandPalette,
+                borderRadius: 6,
+                borderSkipped: false
+            }]
+        },
+        options: {
+            responsive: true,
+            animation: { duration: 700, easing: 'easeOutQuart' },
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: { label: ctx => `Power: ${ctx.parsed.y.toFixed(4)}` }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: { color: textClr },
+                    grid:  { color: gridClr }
+                },
+                x: {
+                    ticks: { color: textClr },
+                    grid:  { display: false }
+                }
+            }
+        }
+    });
 }
 
 // ─── Reset ───────────────────────────────────
@@ -250,8 +342,9 @@ function resetView() {
     uploadCard.style.display    = '';
     progressFill.style.width    = '0%';
     progressPct.textContent     = '0%';
-    stftContainer.style.display = 'none';
-    stftImage.src               = '';
+    chartContainer.style.display = 'none';
+    if (epochChartInst) { epochChartInst.destroy(); epochChartInst = null; }
+    if (bandChartInst)  { bandChartInst.destroy();  bandChartInst  = null; }
 }
 
 btnReset.addEventListener('click', resetView);

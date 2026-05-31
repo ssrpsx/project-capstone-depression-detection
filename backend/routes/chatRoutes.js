@@ -1,6 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../config/db');
+const { OpenAI } = require('openai');
+
+const openai = new OpenAI({
+    apiKey: process.env.TYPHOON_API_KEY || 'YOUR_TYPHOON_API_KEY_HERE',
+    baseURL: 'https://api.opentyphoon.ai/v1',
+});
 
 // Get all chats
 router.get('/', async (req, res) => {
@@ -51,6 +57,72 @@ router.post('/', async (req, res) => {
     } catch (error) {
         console.error('Database Error:', error);
         res.status(500).json({ error: 'Failed to create chat', details: error.message });
+    }
+});
+
+// Create new chat and auto-reply via Typhoon AI
+router.post('/reply', async (req, res) => {
+    const { user_id, chat_text } = req.body;
+    try {
+        // 1. Save user message
+        await db.query('INSERT INTO chats (user_id, chat_text, chat_user) VALUES (?, ?, 1)', [user_id, chat_text]);
+
+        // 2. Get last 6 messages
+        const [historyRows] = await db.query('SELECT chat_text, chat_user FROM chats WHERE user_id = ? ORDER BY created_at DESC LIMIT 6', [user_id]);
+        historyRows.reverse();
+
+        const messages = [
+            {
+                role: 'system',
+                content: `คุณคือ 'JID' จิตแพทย์และผู้เชี่ยวชาญด้านสุขภาพจิต หน้าที่ของคุณคือรับฟัง ให้คำปรึกษา และแนะนำผู้ใช้งานด้วยความเห็นอกเห็นใจและเข้าอกเข้าใจ
+                            กฎเหล็กที่คุณต้องปฏิบัติตามอย่างเคร่งครัด:
+                1. ตอบสั้นๆ กระชับ เป็นธรรมชาติที่สุด เหมือนกำลังพิมพ์แชทคุยกับเพื่อนสนิท ห้ามตอบยาวเกิน 2-3 ประโยค
+2. ห้ามใช้คำสั่งจัดรูปแบบข้อความหรือ Markdown ทุกชนิด (เช่น เครื่องหมายดอกจัน ตัวหนา หรือการทำลิสต์รายการ) ให้พิมพ์เป็นข้อความธรรมดา (Plain Text) เท่านั้น
+3. ห้ามพูดวกไปวนมา ห้ามทวนคำถามเดิมของผู้ใช้
+4. ห้ามใช้คำขึ้นต้นซ้ำๆ และห้ามพูดประโยคเดิมซ้ำกับที่เคยพูดไปแล้ว
+5. ใช้ภาษาพูดที่อบอุ่น เป็นกันเอง ไม่เป็นทางการจนคล้ายตำราเรียน
+6. ตอบกลับเป็นภาษาไทยเสมอ
+การจัดการข้อมูลอ้างอิง (Context จาก RAG):
+หากมีข้อมูล Context แนบมาด้วย ให้คุณทำความเข้าใจข้อมูลนั้นอย่างเงียบๆ แล้วนำเนื้อหามาประยุกต์ใช้เพื่อเป็นคำแนะนำ ห้ามคัดลอกประโยคจาก Context มาตอบตรงๆ ห้ามอ้างอิงหรือบอกว่านำข้อมูลมาจากไหน และให้หลอมรวมความรู้นั้นเป็นคำพูดของคุณเองอย่างเป็นธรรมชาติที่สุด
+
+ตัวอย่างการสนทนา:
+User: วันนี้เครียดมากเลย งานเยอะจนทำไม่ทัน หัวหน้าก็ด่า
+JID: โห ฟังดูเหนื่อยมากเลยนะเนี่ย พักหายใจลึกๆ ก่อนน้า ค่อยๆ จัดลำดับดูว่าอันไหนต้องส่งก่อน มีอะไรให้เราช่วยฟังอีกไหม
+
+User: นอนไม่หลับมาหลายวันแล้ว สมองมันคิดนู่นคิดนี่ตลอด
+JID: เข้าใจเลย อาการแบบนี้ทรมานเนอะ ลองหาอะไรร้อนๆ ดื่มก่อนนอนดูไหม หรือถ้าไม่ไหวจริงๆ เล่าเรื่องที่วนเวียนในหัวให้เราฟังได้นะ
+`
+            }
+        ];
+
+        for (let row of historyRows) {
+            messages.push({
+                role: row.chat_user ? 'user' : 'assistant',
+                content: row.chat_text
+            });
+        }
+
+        // 3. Call Typhoon API
+        const response = await openai.chat.completions.create({
+            model: 'typhoon-v2.5-30b-a3b-instruct',
+            messages: messages,
+            temperature: 0.7, // 🔴 แก้จาก 0.1 เป็น 0.7 หรือ 0.8 เพื่อให้ตอบเป็นธรรมชาติ ไม่ทื่อ
+            max_completion_tokens: 200, // 🔴 ลดลงจาก 10000 เพื่อไม่ให้มันพยายามเขียนยาวเกินไป
+            top_p: 0.9, // 🔴 ปรับขึ้นนิดหน่อยให้มีตัวเลือกคำมากขึ้น
+            frequency_penalty: 1.2, // 🔴 ปรับขึ้น (สูงสุด 2.0) ยิ่งเยอะ AI จะยิ่งพยายามไม่ใช้คำที่เคยพิมพ์ไปแล้ว
+            presence_penalty: 0.8, // 🔴 ปรับขึ้น เพื่อกระตุ้นให้ AI เปลี่ยนหัวข้อหรือหาวิธีตอบแบบใหม่ๆ
+        });
+
+        // Remove markdown artifacts if AI disobeys
+        let botReply = response.choices[0].message.content.trim().replace(/[*_~`#]/g, '');
+
+        // 4. Save Bot message
+        const [botResult] = await db.query('INSERT INTO chats (user_id, chat_text, chat_user) VALUES (?, ?, 0)', [user_id, botReply]);
+
+        res.status(201).json({ reply: botReply, id: botResult.insertId });
+    } catch (error) {
+        console.error('Typhoon Error:', error);
+        res.status(500).json({ error: 'Failed to generate reply', details: error.message });
     }
 });
 
