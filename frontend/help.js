@@ -1,26 +1,20 @@
-/* ══════════════════════════════════════════════
-   help.js  –  JID Help & FAQ Page
-   ══════════════════════════════════════════════ */
-
 const token  = localStorage.getItem('jwt_token');
 const userId = localStorage.getItem('user_id');
 
-// ─── Auth Guard ─────────────────────────────
 if (!token || !userId) {
     window.location.href = 'index.html';
 }
 
-// ─── Logout ─────────────────────────────────
 const btnLogout = document.getElementById('nav-logout');
 if (btnLogout) {
     btnLogout.addEventListener('click', (e) => {
         e.preventDefault();
-        localStorage.clear();
+        localStorage.removeItem('jwt_token');
+        localStorage.removeItem('user_id');
         window.location.href = 'index.html';
     });
 }
 
-// ─── FAQ Accordion ───────────────────────────
 const faqButtons = document.querySelectorAll('.faq-question');
 
 faqButtons.forEach((btn) => {
@@ -28,13 +22,11 @@ faqButtons.forEach((btn) => {
         const item   = btn.closest('.faq-item');
         const isOpen = item.classList.contains('open');
 
-        // Close all items
         document.querySelectorAll('.faq-item').forEach((el) => {
             el.classList.remove('open');
             el.querySelector('.faq-question').setAttribute('aria-expanded', 'false');
         });
 
-        // Toggle clicked item
         if (!isOpen) {
             item.classList.add('open');
             btn.setAttribute('aria-expanded', 'true');
@@ -42,7 +34,6 @@ faqButtons.forEach((btn) => {
     });
 });
 
-// ─── Search / Filter ─────────────────────────
 const searchInput  = document.getElementById('help-search');
 const faqItems     = document.querySelectorAll('.faq-item');
 const noResults    = document.getElementById('faq-no-results');

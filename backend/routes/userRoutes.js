@@ -6,7 +6,6 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-// Configure multer storage
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         const dir = 'uploads/';
@@ -20,10 +19,9 @@ const storage = multer.diskStorage({
 
 const upload = multer({ 
     storage: storage,
-    limits: { fileSize: 5 * 1024 * 1024 } // 5MB limit
+    limits: { fileSize: 5 * 1024 * 1024 } 
 });
 
-// Get all users
 router.get('/', async (req, res) => {
     try {
         const [rows] = await db.query('SELECT id, firstname, lastname, username, created_at FROM users ORDER BY created_at DESC');
@@ -34,7 +32,6 @@ router.get('/', async (req, res) => {
     }
 });
 
-// Get user by id
 router.get('/:id', async (req, res) => {
     try {
         const [rows] = await db.query('SELECT id, firstname, lastname, username, phone, profile_picture, created_at FROM users WHERE id = ?', [req.params.id]);
@@ -46,7 +43,6 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-// Create new user
 router.post('/', async (req, res) => {
     const { username, password } = req.body;
     try {
@@ -58,7 +54,6 @@ router.post('/', async (req, res) => {
     }
 });
 
-// Update user
 router.put('/:id', async (req, res) => {
     const { firstname, lastname, username, phone } = req.body;
     try {
@@ -71,14 +66,13 @@ router.put('/:id', async (req, res) => {
     }
 });
 
-// Delete user
 router.delete('/:id', async (req, res) => {
     try {
-        // Optional: delete profile picture file from disk if exists
+        
         const [userRows] = await db.query('SELECT profile_picture FROM users WHERE id = ?', [req.params.id]);
         if (userRows.length > 0 && userRows[0].profile_picture) {
             const filePath = userRows[0].profile_picture;
-            // filePath might be something like uploads/filename.jpg
+            
             if (fs.existsSync(filePath)) {
                 fs.unlinkSync(filePath);
             }
@@ -93,7 +87,6 @@ router.delete('/:id', async (req, res) => {
     }
 });
 
-// Upload profile picture
 router.post('/upload-profile-pic/:id', upload.single('profile_picture'), async (req, res) => {
     if (!req.file) {
         return res.status(400).json({ error: 'Please upload a file' });
@@ -101,7 +94,7 @@ router.post('/upload-profile-pic/:id', upload.single('profile_picture'), async (
 
     const filePath = `uploads/${req.file.filename}`;
     try {
-        // Delete old picture if exists
+        
         const [rows] = await db.query('SELECT profile_picture FROM users WHERE id = ?', [req.params.id]);
         if (rows.length > 0 && rows[0].profile_picture) {
             const oldPath = rows[0].profile_picture;
@@ -118,7 +111,6 @@ router.post('/upload-profile-pic/:id', upload.single('profile_picture'), async (
     }
 });
 
-// Login user
 router.post('/login', async (req, res) => {
     const { username, password } = req.body;
     try {
@@ -144,7 +136,6 @@ router.post('/login', async (req, res) => {
     }
 });
 
-// Change user password
 router.put('/change-password/:id', async (req, res) => {
     const { oldPassword, newPassword } = req.body;
     
@@ -153,7 +144,7 @@ router.put('/change-password/:id', async (req, res) => {
     }
 
     try {
-        // Find user by ID
+        
         const [rows] = await db.query('SELECT password FROM users WHERE id = ?', [req.params.id]);
         if (rows.length === 0) {
             return res.status(404).json({ error: 'User not found' });
@@ -161,12 +152,10 @@ router.put('/change-password/:id', async (req, res) => {
 
         const user = rows[0];
 
-        // Verify old password
         if (user.password !== oldPassword) {
             return res.status(401).json({ error: 'รหัสผ่านปัจจุบันไม่ถูกต้อง' });
         }
 
-        // Update with new password
         await db.query('UPDATE users SET password = ? WHERE id = ?', [newPassword, req.params.id]);
         res.json({ message: 'Password updated successfully' });
     } catch (error) {

@@ -16,7 +16,7 @@ async function run() {
         let fixedCount = 0;
         for (const row of rows) {
             let isUser = 1;
-            // Let's be extremely liberal with matching the Mock Response
+            
             if (row.chat_text && (row.chat_text.includes('Mock Response') || row.chat_text.includes('AI Mock') || row.chat_text.includes('ฉันยินดีรับฟัง'))) {
                 isUser = 0;
             }
@@ -27,7 +27,6 @@ async function run() {
         
         console.log(`Chat history fixed successfully! Updated ${fixedCount} rows.`);
 
-        // Verification step
         const [check] = await connection.query('SELECT chat_text, chat_user FROM chats ORDER BY id DESC LIMIT 5');
         console.log('Recent 5 chats verification:', check);
 

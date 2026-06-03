@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const db = require('../config/db');
 
-// Get all predictions
 router.get('/', async (req, res) => {
     try {
         const query = `
@@ -27,7 +26,6 @@ router.get('/', async (req, res) => {
     }
 });
 
-// Get prediction by id
 router.get('/:id', async (req, res) => {
     try {
         const [rows] = await db.query('SELECT * FROM predictions WHERE id = ?', [req.params.id]);
@@ -39,7 +37,6 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-// Create new prediction
 router.post('/', async (req, res) => {
     const { chat_id, result, probability } = req.body;
     try {
@@ -51,7 +48,6 @@ router.post('/', async (req, res) => {
     }
 });
 
-// Delete prediction
 router.delete('/:id', async (req, res) => {
     try {
         const [result] = await db.query('DELETE FROM predictions WHERE id = ?', [req.params.id]);

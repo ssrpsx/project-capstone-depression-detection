@@ -74,7 +74,7 @@ document.getElementById('form-signup').addEventListener('submit', async function
 
         if (response.ok) {
             alert('Account created successfully! Please log in.');
-            toggleForms(); // Switch back to login
+            toggleForms(); 
         } else {
             alert('Signup failed: ' + (data.error || 'Unknown error'));
         }

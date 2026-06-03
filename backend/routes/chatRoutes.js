@@ -8,7 +8,6 @@ const openai = new OpenAI({
     baseURL: 'https://api.opentyphoon.ai/v1',
 });
 
-// Get all chats
 router.get('/', async (req, res) => {
     try {
         const [rows] = await db.query(`
@@ -24,7 +23,6 @@ router.get('/', async (req, res) => {
     }
 });
 
-// Get chat by id
 router.get('/:id', async (req, res) => {
     try {
         const [rows] = await db.query('SELECT * FROM chats WHERE id = ?', [req.params.id]);
@@ -36,7 +34,6 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-// Get chats by user_id
 router.get('/user/:user_id', async (req, res) => {
     try {
         const [rows] = await db.query('SELECT * FROM chats WHERE user_id = ? ORDER BY created_at DESC', [req.params.user_id]);
@@ -47,7 +44,6 @@ router.get('/user/:user_id', async (req, res) => {
     }
 });
 
-// Create new chat
 router.post('/', async (req, res) => {
     const { user_id, chat_text, chat_user } = req.body;
     const isUser = chat_user === true || chat_user === "true" || chat_user === 1 ? 1 : 0;
@@ -60,14 +56,12 @@ router.post('/', async (req, res) => {
     }
 });
 
-// Create new chat and auto-reply via Typhoon AI
 router.post('/reply', async (req, res) => {
     const { user_id, chat_text } = req.body;
     try {
-        // 1. Save user message
+        
         await db.query('INSERT INTO chats (user_id, chat_text, chat_user) VALUES (?, ?, 1)', [user_id, chat_text]);
 
-        // 2. Get last 6 messages
         const [historyRows] = await db.query('SELECT chat_text, chat_user FROM chats WHERE user_id = ? ORDER BY created_at DESC LIMIT 6', [user_id]);
         historyRows.reverse();
 
@@ -102,18 +96,16 @@ JID: เข้าใจเลย อาการแบบนี้ทรมา�
             });
         }
 
-        // 3. Call Typhoon API
         const response = await openai.chat.completions.create({
             model: 'typhoon-v2.5-30b-a3b-instruct',
             messages: messages,
-            temperature: 0.7, // 🔴 แก้จาก 0.1 เป็น 0.7 หรือ 0.8 เพื่อให้ตอบเป็นธรรมชาติ ไม่ทื่อ
-            max_completion_tokens: 200, // 🔴 ลดลงจาก 10000 เพื่อไม่ให้มันพยายามเขียนยาวเกินไป
-            top_p: 0.9, // 🔴 ปรับขึ้นนิดหน่อยให้มีตัวเลือกคำมากขึ้น
-            frequency_penalty: 1.2, // 🔴 ปรับขึ้น (สูงสุด 2.0) ยิ่งเยอะ AI จะยิ่งพยายามไม่ใช้คำที่เคยพิมพ์ไปแล้ว
-            presence_penalty: 0.8, // 🔴 ปรับขึ้น เพื่อกระตุ้นให้ AI เปลี่ยนหัวข้อหรือหาวิธีตอบแบบใหม่ๆ
+            temperature: 0.7, 
+            max_completion_tokens: 200, 
+            top_p: 0.9, 
+            frequency_penalty: 1.2, 
+            presence_penalty: 0.8, 
         });
 
-        // Remove markdown artifacts if AI disobeys
         let botReply = response.choices[0].message.content.trim().replace(/[*_~`#]/g, '');
 
         // 4. Save Bot message

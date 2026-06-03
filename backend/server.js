@@ -5,7 +5,6 @@ const fs = require('fs');
 require('dotenv').config();
 const db = require('./config/db');
 
-// Import routes
 const userRoutes = require('./routes/userRoutes');
 const chatRoutes = require('./routes/chatRoutes');
 const predictionRoutes = require('./routes/predictionRoutes');
@@ -13,28 +12,23 @@ const predictionRoutes = require('./routes/predictionRoutes');
 const app = express();
 const PORT = process.env.PORT || 3306;
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 
-// Serve uploaded files
 const uploadsDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir);
 }
 app.use('/uploads', express.static(uploadsDir));
 
-// Basic Route for testing
 app.get('/', (req, res) => {
   res.json({ message: 'Welcome to the API' });
 });
 
-// API Routes
 app.use('/api/users', userRoutes);
 app.use('/api/chats', chatRoutes);
 app.use('/api/predictions', predictionRoutes);
 
-// Status Route
 app.get('/api/status', async (req, res) => {
   try {
     await db.query('SELECT 1');
@@ -44,12 +38,10 @@ app.get('/api/status', async (req, res) => {
   }
 });
 
-// วางไว้ก่อนบรรทัด app.listen
 app.on('error', (err) => {
   console.error('Server error:', err);
 });
 
-// แก้ไขจุด listen เพื่อดูว่ามี error หรือไม่
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 }).on('error', (err) => {
@@ -60,7 +52,6 @@ app.listen(PORT, () => {
   }
 });
 
-// Start Server
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });

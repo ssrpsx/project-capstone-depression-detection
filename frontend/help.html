@@ -20,15 +20,12 @@
 
 <body>
 
-    <!-- ══ OUTER FRAME ══ -->
     <div class="frame">
 
-        <!-- ══ SIDEBAR ══ -->
         <aside class="sidebar">
-            <!-- Logo -->
+            
             <div class="sidebar-logo">JID</div>
 
-            <!-- Main nav -->
             <nav class="sidebar-nav">
                 <a href="chat.html" class="nav-item" id="nav-chat">
                     <i class="fa-solid fa-message"></i>
@@ -44,7 +41,6 @@
                 </a>
             </nav>
 
-            <!-- Footer nav -->
             <nav class="sidebar-footer">
                 <a href="help.html" class="nav-item footer-item active" id="nav-help">
                     <i class="fa-regular fa-circle-question"></i>
@@ -57,97 +53,242 @@
             </nav>
         </aside>
 
-        <!-- ══ MAIN AREA ══ -->
         <main class="main-container">
             <section class="main-content help-section" id="help-section">
 
-                <!-- Title -->
                 <h1 class="help-title">Help & FAQ <span class="help-title-sub">(คำถามที่พบบ่อย)</span></h1>
 
-                <!-- Search Bar -->
                 <div class="help-search-wrapper">
                     <input type="search" id="help-search" class="help-search" placeholder="Start Typing Your Search..."
                         autocomplete="off" />
                     <i class="fa-solid fa-magnifying-glass help-search-icon"></i>
                 </div>
 
-                <!-- FAQ Accordion -->
                 <div class="faq-list" id="faq-list">
 
                     <div class="faq-item" id="faq-1">
                         <button class="faq-question" aria-expanded="false" data-target="faq-answer-1">
-                            <span>โรคซึมเศร้าคืออะไร? แตกต่างจากความเศร้าปกติอย่างไร?</span>
+                            <span>โรคซึมเศร้าคืออะไร?</span>
                             <i class="fa-solid fa-chevron-down faq-chevron"></i>
                         </button>
                         <div class="faq-answer" id="faq-answer-1">
-                            <p>
-                                โรคซึมเศร้าเป็นโรคที่ส่งผลต่อสภาพจิตใจที่ทำให้ผู้ป่วยรู้สึกเศร้า ความเบื่อหน่าย
-                                ไม่มีแรงจูงใจ และสูญเสียความสุขในกิจกรรมที่เคยชอบ โดยต่อเนื่องอย่างน้อย 2 สัปดาห์
-                                และส่งผลกระทบต่อการใช้ชีวิตประจำวัน เช่น การทำงาน การนอน ความสัมพันธ์กับคนรอบข้าง
-                            </p>
+                            <p>โรคซึมเศร้าเป็นโรคทางจิตเวชที่เกิดจากความผิดปกติของสารสื่อประสาทในสมอง ส่งผลต่ออารมณ์ ความคิด พฤติกรรม และการใช้ชีวิตประจำวัน ทำให้ผู้ป่วยมีอาการเศร้า หดหู่ หรือหมดความสนใจในสิ่งต่าง ๆ เป็นเวลานาน</p>
                         </div>
                     </div>
 
                     <div class="faq-item" id="faq-2">
                         <button class="faq-question" aria-expanded="false" data-target="faq-answer-2">
-                            <span>เว็บไซต์นี้ช่วยอะไรได้บ้าง?</span>
+                            <span>โรคซึมเศร้าต่างจากความเศร้าปกติอย่างไร?</span>
                             <i class="fa-solid fa-chevron-down faq-chevron"></i>
                         </button>
                         <div class="faq-answer" id="faq-answer-2">
-                            <p>
-                                เว็บไซต์นี้ใช้ปัญญาประดิษฐ์ (AI) เพื่อช่วยวิเคราะห์ข้อความที่คุณพิมพ์ในแชท
-                                และประเมินความเสี่ยงเบื้องต้นของภาวะซึมเศร้า
-                                นอกจากนี้ยังมีฟีเจอร์ Prediction
-                                ที่วิเคราะห์รูปแบบการสนทนาเพื่อให้ข้อมูลเชิงลึกเพิ่มเติม
-                                แต่ทั้งนี้ผลลัพธ์ที่ได้ไม่ใช่การวินิจฉัยทางการแพทย์
-                                หากมีอาการรุนแรงควรปรึกษาแพทย์ผู้เชี่ยวชาญ
-                            </p>
+                            <p>ความเศร้าปกติมักเกิดจากเหตุการณ์เฉพาะและจะค่อย ๆ ดีขึ้นตามเวลา แต่โรคซึมเศร้ามีอาการต่อเนื่องอย่างน้อย 2 สัปดาห์ และส่งผลกระทบต่อการใช้ชีวิต การเรียน หรือการทำงาน</p>
                         </div>
                     </div>
 
                     <div class="faq-item" id="faq-3">
                         <button class="faq-question" aria-expanded="false" data-target="faq-answer-3">
-                            <span>ข้อมูลส่วนตัวและผลตรวจของฉันเป็นความลับหรือไม่?</span>
+                            <span>อาการใดบ้างที่เข้าข่ายโรคซึมเศร้า?</span>
                             <i class="fa-solid fa-chevron-down faq-chevron"></i>
                         </button>
                         <div class="faq-answer" id="faq-answer-3">
-                            <p>
-                                ข้อมูลทั้งหมดของคุณจะถูกเก็บรักษาไว้อย่างปลอดภัยและไม่เปิดเผยต่อบุคคลภายนอก
-                                เราใช้การเข้ารหัสข้อมูลและระบบ JWT Token เพื่อป้องกันการเข้าถึงโดยไม่ได้รับอนุญาต
-                                คุณสามารถลบบัญชีและข้อมูลทั้งหมดได้ตลอดเวลาผ่านหน้า Settings
-                            </p>
+                            <p>อาการที่พบบ่อย ได้แก่ รู้สึกเศร้าหรือหดหู่ เบื่อสิ่งที่เคยชอบ อ่อนเพลีย นอนไม่หลับหรือหลับมากเกินไป เบื่ออาหารหรือกินมากขึ้น สมาธิลดลง รู้สึกไร้ค่า และอาจมีความคิดทำร้ายตนเอง</p>
                         </div>
                     </div>
 
                     <div class="faq-item" id="faq-4">
                         <button class="faq-question" aria-expanded="false" data-target="faq-answer-4">
-                            <span>AI ที่ใช้ในเว็บไซต์นี้มีความแม่นยำแค่ไหน?</span>
+                            <span>ต้องมีอาการนานแค่ไหนจึงควรพบแพทย์?</span>
                             <i class="fa-solid fa-chevron-down faq-chevron"></i>
                         </button>
                         <div class="faq-answer" id="faq-answer-4">
-                            <p>
-                                โมเดล AI ของเราผ่านการฝึกฝนด้วยชุดข้อมูลที่เกี่ยวข้องกับภาวะซึมเศร้า อย่างไรก็ตาม
-                                ผลลัพธ์ที่ได้เป็นเพียงการประเมินเบื้องต้นเท่านั้น
-                                ไม่สามารถแทนที่การวินิจฉัยจากจิตแพทย์หรือนักจิตวิทยาได้
-                                กรุณาใช้ข้อมูลนี้เป็นแนวทางในการตัดสินใจพบแพทย์เท่านั้น
-                            </p>
+                            <p>หากมีอาการต่อเนื่องเกือบทุกวันเป็นเวลา 2 สัปดาห์ขึ้นไป ควรเข้ารับการประเมินจากจิตแพทย์หรือบุคลากรด้านสุขภาพจิต</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item" id="faq-5">
+                        <button class="faq-question" aria-expanded="false" data-target="faq-answer-5">
+                            <span>โรคซึมเศร้าเกิดจากอะไร?</span>
+                            <i class="fa-solid fa-chevron-down faq-chevron"></i>
+                        </button>
+                        <div class="faq-answer" id="faq-answer-5">
+                            <p>โรคซึมเศร้าเกิดจากหลายปัจจัยร่วมกัน เช่น ความผิดปกติของสารเคมีในสมอง พันธุกรรม ความเครียดสะสม การสูญเสีย หรือปัญหาชีวิตที่ส่งผลกระทบต่อจิตใจ</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item" id="faq-6">
+                        <button class="faq-question" aria-expanded="false" data-target="faq-answer-6">
+                            <span>โรคซึมเศร้าถ่ายทอดทางพันธุกรรมได้หรือไม่?</span>
+                            <i class="fa-solid fa-chevron-down faq-chevron"></i>
+                        </button>
+                        <div class="faq-answer" id="faq-answer-6">
+                            <p>มีส่วนเกี่ยวข้องทางพันธุกรรม ผู้ที่มีคนในครอบครัวเป็นโรคซึมเศร้าอาจมีความเสี่ยงมากกว่าคนทั่วไป แต่ไม่ได้หมายความว่าจะต้องเป็นโรคนี้ทุกคน</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item" id="faq-7">
+                        <button class="faq-question" aria-expanded="false" data-target="faq-answer-7">
+                            <span>ใครบ้างที่มีความเสี่ยงเป็นโรคซึมเศร้า?</span>
+                            <i class="fa-solid fa-chevron-down faq-chevron"></i>
+                        </button>
+                        <div class="faq-answer" id="faq-answer-7">
+                            <p>ผู้ที่เผชิญความเครียดเรื้อรัง สูญเสียบุคคลสำคัญ มีปัญหาครอบครัว ถูกกลั่นแกล้ง หรือมีโรคเรื้อรังบางชนิด อาจมีความเสี่ยงเพิ่มขึ้น</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item" id="faq-8">
+                        <button class="faq-question" aria-expanded="false" data-target="faq-answer-8">
+                            <span>เด็กและวัยรุ่นสามารถเป็นโรคซึมเศร้าได้หรือไม่?</span>
+                            <i class="fa-solid fa-chevron-down faq-chevron"></i>
+                        </button>
+                        <div class="faq-answer" id="faq-answer-8">
+                            <p>ได้ โรคซึมเศร้าสามารถเกิดได้ทุกช่วงวัย โดยในเด็กและวัยรุ่นอาจแสดงออกเป็นความหงุดหงิด ก้าวร้าว แยกตัว หรือผลการเรียนตก</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item" id="faq-9">
+                        <button class="faq-question" aria-expanded="false" data-target="faq-answer-9">
+                            <span>ภาวะหมดไฟในการทำงาน (Burnout) เกี่ยวข้องกับโรคซึมเศร้าหรือไม่?</span>
+                            <i class="fa-solid fa-chevron-down faq-chevron"></i>
+                        </button>
+                        <div class="faq-answer" id="faq-answer-9">
+                            <p>ภาวะหมดไฟที่เกิดขึ้นต่อเนื่องและไม่ได้รับการดูแลอย่างเหมาะสม อาจเพิ่มความเสี่ยงต่อการเกิดโรคซึมเศร้าได้</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item" id="faq-10">
+                        <button class="faq-question" aria-expanded="false" data-target="faq-answer-10">
+                            <span>แบบประเมิน 2Q และ 9Q คืออะไร?</span>
+                            <i class="fa-solid fa-chevron-down faq-chevron"></i>
+                        </button>
+                        <div class="faq-answer" id="faq-answer-10">
+                            <p>เป็นแบบประเมินคัดกรองความเสี่ยงโรคซึมเศร้าที่พัฒนาโดยกรมสุขภาพจิต ใช้สำหรับประเมินเบื้องต้น ไม่สามารถใช้ยืนยันการวินิจฉัยโรคแทนจิตแพทย์ได้</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item" id="faq-11">
+                        <button class="faq-question" aria-expanded="false" data-target="faq-answer-11">
+                            <span>หากสงสัยว่าตนเองเป็นโรคซึมเศร้า ควรทำอย่างไร?</span>
+                            <i class="fa-solid fa-chevron-down faq-chevron"></i>
+                        </button>
+                        <div class="faq-answer" id="faq-answer-11">
+                            <p>ควรเข้ารับการประเมินจากจิตแพทย์ นักจิตวิทยา หรือบุคลากรสุขภาพจิต เพื่อรับการวินิจฉัยและวางแผนการรักษาที่เหมาะสม</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item" id="faq-12">
+                        <button class="faq-question" aria-expanded="false" data-target="faq-answer-12">
+                            <span>โรคซึมเศร้ารักษาได้หรือไม่?</span>
+                            <i class="fa-solid fa-chevron-down faq-chevron"></i>
+                        </button>
+                        <div class="faq-answer" id="faq-answer-12">
+                            <p>รักษาได้ และผู้ป่วยส่วนใหญ่มีอาการดีขึ้นเมื่อได้รับการรักษาอย่างถูกต้องและต่อเนื่อง</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item" id="faq-13">
+                        <button class="faq-question" aria-expanded="false" data-target="faq-answer-13">
+                            <span>การรักษาโรคซึมเศร้ามีวิธีใดบ้าง?</span>
+                            <i class="fa-solid fa-chevron-down faq-chevron"></i>
+                        </button>
+                        <div class="faq-answer" id="faq-answer-13">
+                            <p>แนวทางรักษาหลักประกอบด้วยการใช้ยาต้านเศร้า การทำจิตบำบัด และการปรับพฤติกรรมการใช้ชีวิต เช่น การนอนหลับให้เพียงพอและการออกกำลังกาย</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item" id="faq-14">
+                        <button class="faq-question" aria-expanded="false" data-target="faq-answer-14">
+                            <span>ยารักษาโรคซึมเศร้าทำให้ติดยาหรือไม่?</span>
+                            <i class="fa-solid fa-chevron-down faq-chevron"></i>
+                        </button>
+                        <div class="faq-answer" id="faq-answer-14">
+                            <p>ยาต้านเศร้าไม่ใช่ยาเสพติดและไม่ทำให้ติดยา แต่ควรรับประทานตามคำแนะนำของแพทย์อย่างเคร่งครัด</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item" id="faq-15">
+                        <button class="faq-question" aria-expanded="false" data-target="faq-answer-15">
+                            <span>ต้องใช้เวลานานแค่ไหนจึงจะเห็นผลจากยา?</span>
+                            <i class="fa-solid fa-chevron-down faq-chevron"></i>
+                        </button>
+                        <div class="faq-answer" id="faq-answer-15">
+                            <p>โดยทั่วไปยาจะเริ่มออกฤทธิ์และเห็นผลชัดเจนภายใน 2–4 สัปดาห์ และต้องรับประทานต่อเนื่องตามแผนการรักษาของแพทย์</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item" id="faq-16">
+                        <button class="faq-question" aria-expanded="false" data-target="faq-answer-16">
+                            <span>หากอาการดีขึ้นแล้ว สามารถหยุดยาเองได้หรือไม่?</span>
+                            <i class="fa-solid fa-chevron-down faq-chevron"></i>
+                        </button>
+                        <div class="faq-answer" id="faq-answer-16">
+                            <p>ไม่ควรหยุดยาเอง เพราะอาจทำให้อาการกลับมาเป็นซ้ำหรือเกิดอาการถอนยา ควรปรึกษาแพทย์ก่อนทุกครั้ง</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item" id="faq-17">
+                        <button class="faq-question" aria-expanded="false" data-target="faq-answer-17">
+                            <span>การออกกำลังกายช่วยลดอาการซึมเศร้าได้หรือไม่?</span>
+                            <i class="fa-solid fa-chevron-down faq-chevron"></i>
+                        </button>
+                        <div class="faq-answer" id="faq-answer-17">
+                            <p>ช่วยได้ การออกกำลังกายอย่างสม่ำเสมอช่วยกระตุ้นการหลั่งสารแห่งความสุข ลดความเครียด และช่วยเสริมผลการรักษา</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item" id="faq-18">
+                        <button class="faq-question" aria-expanded="false" data-target="faq-answer-18">
+                            <span>โรคซึมเศร้ามีผลต่อการเรียนหรือการทำงานหรือไม่?</span>
+                            <i class="fa-solid fa-chevron-down faq-chevron"></i>
+                        </button>
+                        <div class="faq-answer" id="faq-answer-18">
+                            <p>มี เพราะอาจส่งผลต่อสมาธิ ความจำ การตัดสินใจ ประสิทธิภาพการทำงาน และแรงจูงใจในการใช้ชีวิต</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item" id="faq-19">
+                        <button class="faq-question" aria-expanded="false" data-target="faq-answer-19">
+                            <span>คนรอบข้างควรช่วยเหลือผู้ป่วยโรคซึมเศร้าอย่างไร?</span>
+                            <i class="fa-solid fa-chevron-down faq-chevron"></i>
+                        </button>
+                        <div class="faq-answer" id="faq-answer-19">
+                            <p>ควรรับฟังด้วยความเข้าใจ ไม่ตัดสิน ไม่ตำหนิ ให้กำลังใจ และสนับสนุนให้ผู้ป่วยเข้ารับการรักษาอย่างต่อเนื่อง</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item" id="faq-20">
+                        <button class="faq-question" aria-expanded="false" data-target="faq-answer-20">
+                            <span>หากมีความคิดอยากทำร้ายตัวเองหรืออยากเสียชีวิต ควรทำอย่างไร?</span>
+                            <i class="fa-solid fa-chevron-down faq-chevron"></i>
+                        </button>
+                        <div class="faq-answer" id="faq-answer-20">
+                            <p>ควรรีบขอความช่วยเหลือจากคนใกล้ชิดทันที ติดต่อสายด่วนสุขภาพจิต <strong>1323</strong> ตลอด 24 ชั่วโมง หรือไปโรงพยาบาลที่ใกล้ที่สุดโดยเร็ว</p>
                         </div>
                     </div>
 
                 </div>
 
-                <!-- No Results Message -->
                 <p class="faq-no-results" id="faq-no-results" style="display: none;">
                     ไม่พบคำถามที่ตรงกับการค้นหา
                 </p>
 
-                <!-- Crisis Support Card -->
                 <div class="crisis-card" id="crisis-card">
                     <p class="crisis-subtitle">หากคุณกำลังรู้สึกแย่มากๆ หรือมีความคิดอยากทำร้ายตัวเอง</p>
                     <p class="crisis-text">
                         โปรดติดต่อสายด่วนสุขภาพจิต <strong>1323</strong>
                         <span class="crisis-detail">(โทรฟรีตลอด 24 ชั่วโมง)</span>
                     </p>
+                </div>
+
+                <div class="references-section">
+                    <h3 class="references-title"><i class="fa-solid fa-book-open"></i> แหล่งอ้างอิง</h3>
+                    <ol class="references-list">
+                        <li><a href="https://dmhpd.dmh.go.th/media-brochure-depression-68-05-01/" class="help-link" target="_blank" rel="noopener">กรมสุขภาพจิต — สื่อเผยแพร่ความรู้โรคซึมเศร้า (2568)</a></li>
+                        <li><a href="https://dmhpd.dmh.go.th/depression2/" class="help-link" target="_blank" rel="noopener">กรมสุขภาพจิต — โรคซึมเศร้า (ตอนที่ 2)</a></li>
+                        <li><a href="https://dmhpd.dmh.go.th/depression1/" class="help-link" target="_blank" rel="noopener">กรมสุขภาพจิต — โรคซึมเศร้า (ตอนที่ 1)</a></li>
+                        <li><a href="https://dmhpd.dmh.go.th/depression/" class="help-link" target="_blank" rel="noopener">กรมสุขภาพจิต — ข้อมูลโรคซึมเศร้า</a></li>
+                        <li><a href="https://dmhpd.dmh.go.th/" class="help-link" target="_blank" rel="noopener">กรมสุขภาพจิต — เว็บไซต์หลัก</a></li>
+                    </ol>
                 </div>
 
             </section>

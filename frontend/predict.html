@@ -55,7 +55,6 @@
 
     <div class="frame">
 
-        <!-- ══ SIDEBAR ══ -->
         <aside class="sidebar">
             <div class="sidebar-logo">JID</div>
 
@@ -86,17 +85,14 @@
             </nav>
         </aside>
 
-        <!-- ══ MAIN AREA ══ -->
         <main class="main-container">
             <section class="predict-section" id="predict-section">
 
-                <!-- Header -->
                 <div class="predict-header">
                     <h1 class="predict-title">Depression Prediction</h1>
                     <p class="predict-subtitle">อัปโหลดไฟล์ข้อมูลเพื่อให้ AI วิเคราะห์ความน่าจะเป็นของภาวะซึมเศร้า</p>
                 </div>
 
-                <!-- ── STEP 1: Upload Zone ── -->
                 <div class="predict-card upload-card" id="upload-card">
                     <div class="card-step-badge">01</div>
                     <h2 class="card-title">อัปโหลดข้อมูล</h2>
@@ -115,7 +111,6 @@
                             <p class="drop-hint">รองรับ: EDF · ขนาดสูงสุด 100 MB</p>
                         </div>
 
-                        <!-- File selected state -->
                         <div class="file-selected" id="file-selected" style="display:none;">
                             <div class="file-icon-wrap">
                                 <i class="fa-solid fa-file-medical file-icon"></i>
@@ -136,7 +131,6 @@
                     </button>
                 </div>
 
-                <!-- ── STEP 2: Analyzing (hidden by default) ── -->
                 <div class="predict-card analyzing-card" id="analyzing-card" style="display:none;">
                     <div class="analyzing-anim">
                         <span></span><span></span><span></span><span></span><span></span>
@@ -150,20 +144,17 @@
                     </div>
                 </div>
 
-                <!-- ── STEP 3: Result (hidden by default) ── -->
                 <div class="predict-card result-card" id="result-card" style="display:none;">
                     <div class="card-step-badge">02</div>
                     <h2 class="card-title">ผลการวิเคราะห์</h2>
 
-                    <!-- Gauge + Verdict -->
                     <div class="result-body">
 
-                        <!-- Gauge -->
                         <div class="gauge-wrap">
                             <svg class="gauge-svg" viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
-                                <!-- Background arc -->
+                                
                                 <path class="gauge-bg" d="M 20 110 A 80 80 0 0 1 180 110" fill="none" stroke-width="18" stroke-linecap="round"/>
-                                <!-- Colored arc -->
+                                
                                 <path class="gauge-arc" id="gauge-arc" d="M 20 110 A 80 80 0 0 1 180 110" fill="none" stroke-width="18" stroke-linecap="round"
                                     stroke-dasharray="251.2" stroke-dashoffset="251.2"/>
                             </svg>
@@ -173,7 +164,6 @@
                             </div>
                         </div>
 
-                        <!-- Verdict -->
                         <div class="verdict-wrap" id="verdict-wrap">
                             <div class="verdict-badge" id="verdict-badge">
                                 <i class="fa-solid fa-circle-check verdict-icon" id="verdict-icon"></i>
@@ -181,7 +171,6 @@
                             </div>
                             <p class="verdict-desc" id="verdict-desc">รอผลการวิเคราะห์</p>
 
-                            <!-- Detail row -->
                             <div class="result-details">
                                 <div class="detail-item">
                                     <span class="detail-label">ไฟล์ที่วิเคราะห์</span>
@@ -198,8 +187,7 @@
                             </div>
                         </div>
                     </div>
-                    
-                    <!-- Charts -->
+
                     <div class="chart-container" id="chart-container" style="display:none;">
                         <p class="chart-section-title">
                             <i class="fa-solid fa-chart-line"></i> กราฟผลการวิเคราะห์
@@ -214,7 +202,6 @@
                         </div>
                     </div>
 
-                    <!-- Actions -->
                     <div class="result-actions">
                         <button class="btn-reset" id="btn-reset" type="button">
                             <i class="fa-solid fa-rotate-left"></i> วิเคราะห์ใหม่

@@ -1,17 +1,11 @@
-/* ══════════════════════════════════════════════
-   settings.js  –  JID Settings Page
-   ══════════════════════════════════════════════ */
-
 const API_BASE = 'http://localhost:3000/api/users';
 const userId   = localStorage.getItem('user_id');
 const token    = localStorage.getItem('jwt_token');
 
-// ─── Auth Guard ─────────────────────────────
 if (!token || !userId) {
     window.location.href = 'index.html';
 }
 
-// ─── DOM Refs ───────────────────────────────
 function togglePasswordVisibility(inputId) {
     const passwordInput = document.getElementById(inputId);
     const toggleButton = passwordInput.nextElementSibling;
@@ -52,7 +46,6 @@ const settingsProfileImg = document.getElementById('settings-profile-img');
 const themeToggle        = document.getElementById('theme-toggle');
 const themeLabel         = document.getElementById('theme-label');
 
-// ─── Theme Toggle ───────────────────────────
 if (localStorage.getItem('theme') === 'dark') {
     themeToggle.checked = true;
     if (themeLabel) themeLabel.textContent = 'Dark Mode';
@@ -72,7 +65,6 @@ themeToggle.addEventListener('change', (e) => {
     }
 });
 
-// ─── Load User Data ─────────────────────────
 async function loadUserData() {
     try {
         const response = await fetch(`${API_BASE}/${userId}`, {
@@ -81,7 +73,7 @@ async function loadUserData() {
         const user = await response.json();
 
         if (response.ok) {
-            // Update display text
+            
             const fullName = (user.firstname || user.lastname) 
                 ? `${user.firstname || ''} ${user.lastname || ''}`.trim()
                 : user.username;
@@ -89,15 +81,13 @@ async function loadUserData() {
             displayEmail.textContent = user.username;
             displayPhone.textContent = user.phone || 'No phone number';
 
-            // Fill inputs
             inputFirstname.value = user.firstname || '';
             inputLastname.value  = user.lastname || '';
             inputEmail.value     = user.username || '';
             inputPhone.value     = user.phone || '';
 
-            // Update profile image if exists
             if (user.profile_picture) {
-                // Assuming backend serves from /uploads
+                
                 settingsProfileImg.src = `http://localhost:3000/${user.profile_picture}`;
             }
         } else {
@@ -108,7 +98,6 @@ async function loadUserData() {
     }
 }
 
-// ─── Update Profile ─────────────────────────
 btnUpdate.addEventListener('click', async () => {
     const updatedData = {
         firstname: inputFirstname.value.trim(),
@@ -129,7 +118,7 @@ btnUpdate.addEventListener('click', async () => {
 
         if (response.ok) {
             alert('บันทึกข้อมูลเรียบร้อยแล้ว!');
-            loadUserData(); // Refresh view
+            loadUserData(); 
         } else {
             const data = await response.json();
             alert('ล้มเหลวในการบันทึก: ' + (data.error || 'Unknown error'));
@@ -140,7 +129,6 @@ btnUpdate.addEventListener('click', async () => {
     }
 });
 
-// ─── Update Password ────────────────────────
 btnUpdatePassword.addEventListener('click', async () => {
     const oldPassword = inputOldPassword.value;
     const newPassword = inputNewPassword.value;
@@ -181,16 +169,14 @@ btnUpdatePassword.addEventListener('click', async () => {
     }
 });
 
-
-// ─── Logout ─────────────────────────────────
 btnLogout.addEventListener('click', () => {
-    localStorage.clear();
+    localStorage.removeItem('jwt_token');
+    localStorage.removeItem('user_id');
     window.location.href = 'index.html';
 });
 
-// ─── Profile Picture Upload ─────────────────
 btnUpload.addEventListener('click', () => {
-    fileUpload.click(); // Trigger hidden input
+    fileUpload.click(); 
 });
 
 avatar_Upload.addEventListener('click', () => {
@@ -223,7 +209,6 @@ fileUpload.addEventListener('change', async (e) => {
     }
 });
 
-// ─── Delete Profile ──────────────────────────
 btnDelete.addEventListener('click', async () => {
     const confirmDelete = confirm('คุณแน่ใจหรือไม่ว่าต้องการลบโปรไฟล์? การดำเนินการนี้ไม่สามารถย้อนกลับได้ และข้อมูลทั้งหมดจะถูกลบ!');
     
@@ -249,16 +234,14 @@ btnDelete.addEventListener('click', async () => {
     }
 });
 
-// ─── Logout ──────────────────────────────────
 const performLogout = (e) => {
     e.preventDefault();
-    localStorage.clear();
+    localStorage.removeItem('jwt_token');
+    localStorage.removeItem('user_id');
     window.location.href = 'index.html';
 };
 
 if (btnLogout) btnLogout.addEventListener('click', performLogout);
 if (btnLogoutMobile) btnLogoutMobile.addEventListener('click', performLogout);
 
-
-// Run
 loadUserData();

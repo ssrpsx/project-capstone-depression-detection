@@ -1,26 +1,20 @@
-/* ══════════════════════════════════════════════
-   predict.js  –  JID Prediction Page
-   ══════════════════════════════════════════════ */
-
 const token  = localStorage.getItem('jwt_token');
 const userId = localStorage.getItem('user_id');
 
-// ─── Auth Guard ─────────────────────────────
 if (!token || !userId) {
     window.location.href = 'index.html';
 }
 
-// ─── Logout ─────────────────────────────────
 const btnLogout = document.getElementById('nav-logout');
 if (btnLogout) {
     btnLogout.addEventListener('click', (e) => {
         e.preventDefault();
-        localStorage.clear();
+        localStorage.removeItem('jwt_token');
+        localStorage.removeItem('user_id');
         window.location.href = 'index.html';
     });
 }
 
-// ─── DOM Refs ────────────────────────────────
 const dropZone       = document.getElementById('drop-zone');
 const fileInput      = document.getElementById('file-input');
 const btnBrowse      = document.getElementById('btn-browse');
@@ -56,7 +50,6 @@ let bandChartInst    = null;
 
 let selectedFile = null;
 
-// ─── Helpers ─────────────────────────────────
 function formatBytes(bytes) {
     if (bytes < 1024)       return bytes + ' B';
     if (bytes < 1048576)    return (bytes / 1024).toFixed(1) + ' KB';
@@ -80,14 +73,12 @@ function clearFile() {
     btnAnalyze.disabled = true;
 }
 
-// ─── File Input ──────────────────────────────
 btnBrowse.addEventListener('click', () => fileInput.click());
 
 fileInput.addEventListener('change', () => {
     if (fileInput.files[0]) showFile(fileInput.files[0]);
 });
 
-// ─── Drag & Drop ─────────────────────────────
 dropZone.addEventListener('dragover', (e) => {
     e.preventDefault();
     dropZone.classList.add('dragover');
@@ -104,21 +95,17 @@ dropZone.addEventListener('drop', (e) => {
     if (file) showFile(file);
 });
 
-// ─── Remove File ─────────────────────────────
 btnRemove.addEventListener('click', clearFile);
 
-// ─── Analyze ─────────────────────────────────
 btnAnalyze.addEventListener('click', startAnalysis);
 
 async function startAnalysis() {
     if (!selectedFile) return;
 
-    // Show analyzing card
     uploadCard.style.display    = 'none';
     analyzingCard.style.display = '';
     resultCard.style.display    = 'none';
 
-    // Fake progress animation
     let pct = 0;
     const interval = setInterval(() => {
         pct += Math.random() * 8 + 2;
@@ -128,11 +115,10 @@ async function startAnalysis() {
     }, 200);
 
     try {
-        // Build form data
+        
         const formData = new FormData();
         formData.append('file', selectedFile);
 
-        // Fetch to Python AI API
         const res = await fetch('http://localhost:5000/api/predict', {
             method: 'POST',
             body: formData
@@ -164,23 +150,21 @@ async function startAnalysis() {
     }
 }
 
-// ─── Show Result ─────────────────────────────
 function showResult(probability, filename, epochProbs, bandPowers) {
     analyzingCard.style.display = 'none';
     resultCard.style.display    = '';
 
     const pct = Math.round(probability * 100);
 
-    // Animate gauge (SVG arc — full arc length ≈ 251.2)
     const arcLength = 251.2;
     const offset    = arcLength - (arcLength * probability);
 
-    gaugeArc.style.strokeDashoffset = arcLength; // start hidden
+    gaugeArc.style.strokeDashoffset = arcLength; 
     gaugePct.textContent = '0%';
 
     setTimeout(() => {
         gaugeArc.style.strokeDashoffset = offset;
-        // Count-up animation
+        
         let current = 0;
         const step  = pct / 60;
         const timer = setInterval(() => {
@@ -190,7 +174,6 @@ function showResult(probability, filename, epochProbs, bandPowers) {
         }, 16);
     }, 100);
 
-    // Color gauge by risk level
     if (pct >= 70) {
         gaugeArc.style.stroke = '#e05555';
     } else if (pct >= 40) {
@@ -199,7 +182,6 @@ function showResult(probability, filename, epochProbs, bandPowers) {
         gaugeArc.style.stroke = '#1a8f5c';
     }
 
-    // Verdict
     verdictBadge.className = 'verdict-badge';
     if (pct >= 70) {
         verdictBadge.classList.add('risk');
@@ -227,14 +209,12 @@ function showResult(probability, filename, epochProbs, bandPowers) {
         resultLevel.textContent = 'ต่ำ (Low Risk)';
     }
 
-    // Detail info
     resultFilename.textContent = filename;
     resultDate.textContent     = new Date().toLocaleDateString('th-TH', {
         year: 'numeric', month: 'long', day: 'numeric',
         hour: '2-digit', minute: '2-digit'
     });
-    
-    // Charts
+
     if (epochProbs && epochProbs.length > 0) {
         renderCharts(epochProbs, bandPowers || {});
         chartContainer.style.display = 'block';
@@ -243,7 +223,6 @@ function showResult(probability, filename, epochProbs, bandPowers) {
     }
 }
 
-// ─── Render Charts ───────────────────────────
 function renderCharts(epochProbs, bandPowers) {
     const isDark  = document.documentElement.classList.contains('dark-mode');
     const textClr = isDark ? '#999' : '#64748b';
@@ -252,7 +231,6 @@ function renderCharts(epochProbs, bandPowers) {
     if (epochChartInst) epochChartInst.destroy();
     if (bandChartInst)  bandChartInst.destroy();
 
-    // ── Epoch timeline chart ──────────────────
     const epochLabels = epochProbs.map((_, i) => `${i * 5}–${(i + 1) * 5}s`);
     const epochColors = epochProbs.map(p =>
         p >= 0.7 ? 'rgba(224,85,85,0.85)' :
@@ -294,7 +272,6 @@ function renderCharts(epochProbs, bandPowers) {
         }
     });
 
-    // ── Frequency band chart ──────────────────
     const bandLabels = Object.keys(bandPowers);
     const bandValues = Object.values(bandPowers);
     const bandPalette = ['#5499ba', '#5aaccc', '#3b82f6', '#8b5cf6', '#ec4899'];
@@ -334,7 +311,6 @@ function renderCharts(epochProbs, bandPowers) {
     });
 }
 
-// ─── Reset ───────────────────────────────────
 function resetView() {
     clearFile();
     analyzingCard.style.display = 'none';
@@ -349,7 +325,6 @@ function resetView() {
 
 btnReset.addEventListener('click', resetView);
 
-// ─── Save Result ─────────────────────────────
 btnSave.addEventListener('click', () => {
     const pct  = gaugePct.textContent;
     const msg  = verdictText.textContent;

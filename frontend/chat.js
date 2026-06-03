@@ -1,7 +1,3 @@
-/* ══════════════════════════════════════════════
-   chat.js  –  JID Chat App
-   ══════════════════════════════════════════════ */
-
 const API_CHAT = 'http://localhost:3000/api/chats';
 const API_USER = 'http://localhost:3000/api/users';
 const userId   = localStorage.getItem('user_id');
@@ -9,18 +5,16 @@ const token    = localStorage.getItem('jwt_token');
 
 let userProfilePic = null;
 
-// ─── Auth Guard ─────────────────────────────
 if (!token || !userId) {
     window.location.href = 'index.html';
 }
 
-// ─── DOM refs ─────────────────────────────────
 const messagesContainer = document.getElementById('messages');
 const msgInput          = document.getElementById('msg-input');
 const btnSend           = document.getElementById('btn-send');
 const btnAdd            = document.getElementById('btn-add');
 const btnLogout         = document.getElementById('nav-logout');
-// ─── Init Load ────────────────────────────────
+
 async function loadUserProfile() {
     if (!userId) return;
     try {
@@ -46,14 +40,13 @@ async function loadHistory() {
         const history = await response.json();
 
         if (response.ok) {
-            // Clear current welcome or existing messages
-            messagesContainer.innerHTML = '';
             
-            // Re-append welcome if empty
+            messagesContainer.innerHTML = '';
+
             if (history.length === 0) {
                 appendMessage('สวัสดีครับ! 👋 ฉันชื่อ JID\nพูดคุยกับฉันได้เลยนะครับ', 'bot');
             } else {
-                // history returns newest first normally in my route, let's reverse to show chronological
+                
                 history.reverse().forEach(chat => {
                     appendMessage(chat.chat_text, chat.chat_user ? 'user' : 'bot', chat.created_at);
                 });
@@ -64,7 +57,6 @@ async function loadHistory() {
     }
 }
 
-// ─── Helpers ─────────────────────────────────
 function formatTime(date) {
     return date.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' });
 }
@@ -73,12 +65,10 @@ function scrollBottom() {
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
 }
 
-// ─── Append message row ───────────────────────
-function appendMessage(text, who /* 'bot' | 'user' */, timestamp = null) {
+function appendMessage(text, who , timestamp = null) {
     const row = document.createElement('div');
     row.className = `msg-row ${who}`;
 
-    // avatar
     const av = document.createElement('div');
     av.className = `msg-av ${who === 'bot' ? 'bot-av' : 'user-av'}`;
     
@@ -98,7 +88,6 @@ function appendMessage(text, who /* 'bot' | 'user' */, timestamp = null) {
         }
     }
 
-    // bubble
     const bubble = document.createElement('div');
     bubble.className = `msg-bubble ${who === 'bot' ? 'bot-bubble' : 'user-bubble'}`;
 
@@ -119,7 +108,6 @@ function appendMessage(text, who /* 'bot' | 'user' */, timestamp = null) {
     scrollBottom();
 }
 
-// ─── Typing indicator ─────────────────────────
 function showTyping() {
     removeTyping();
     const row = document.createElement('div');
@@ -147,19 +135,17 @@ function removeTyping() {
     if (el) el.remove();
 }
 
-// ─── Send logic ───────────────────────────────
 async function sendMessage() {
     const text = msgInput.value.trim();
     if (!text) return;
 
-    // 1. Show message in UI
     appendMessage(text, 'user');
     msgInput.value = '';
     btnSend.disabled = true;
     showTyping();
 
     try {
-        // 2. Call new reply endpoint
+        
         const response = await fetch(`${API_CHAT}/reply`, {
             method: 'POST',
             headers: { 
@@ -188,7 +174,6 @@ async function sendMessage() {
     }
 }
 
-// ─── Events ──────────────────────────────────
 btnSend.addEventListener('click', sendMessage);
 
 msgInput.addEventListener('keydown', e => {
@@ -200,12 +185,12 @@ msgInput.addEventListener('keydown', e => {
 if (btnLogout) {
     btnLogout.addEventListener('click', (e) => {
         e.preventDefault();
-        localStorage.clear();
+        localStorage.removeItem('jwt_token');
+        localStorage.removeItem('user_id');
         window.location.href = 'index.html';
     });
 }
 
-// Run Init
 async function init() {
     await loadUserProfile();
     await loadHistory();
